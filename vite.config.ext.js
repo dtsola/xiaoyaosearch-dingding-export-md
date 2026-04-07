@@ -4,18 +4,13 @@ import manifest from './manifest.json' with { type: 'json' };
 
 export default defineConfig({
   plugins: [
-    crx({
-      manifest,
-      contentScripts: {
-        injectCss: true,
-      },
-    }),
+    crx({ manifest }),
   ],
 
   build: {
     rollupOptions: {
       input: {
-        content: 'src/content.js',
+        'content': 'src/content.js',
       },
     },
   },

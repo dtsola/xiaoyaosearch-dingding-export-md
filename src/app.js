@@ -8,20 +8,23 @@ import version from "./script/version.js";
 // 导入样式 - Tailwind CSS + DaisyUI
 import "./app.css";
 
-let ddddom = document.querySelector(`.my-dingdocdownloader`);
+// ============================================
+// 应用逻辑封装为函数，按需执行
+// ============================================
 
-// 如果是本地调试，那么每次运行总是生成新的，干掉老的。
-if (process.env.NODE_ENV === "development") {
+function initApp() {
+    let ddddom = document.querySelector(`.my-dingdocdownloader`);
+
+    // 如果已存在，先移除
     if (ddddom) {
         ddddom.remove();
         ddddom = null;
     }
-}
 
+    if (document.querySelector(`.my-dingdocdownloader`)) {
+        return; // 已存在，不重复创建
+    }
 
-if (ddddom) {
-    ddddom.classList.remove("hidden");
-} else {
     const ins = new Baby({
         render(h) {
             const dom =
@@ -54,7 +57,7 @@ if (ddddom) {
                                 ref: "close",
                                 type: "button",
                                 class: "dddd-btn dddd-btn-sm dddd-btn-xs dddd-btn-circle dddd-btn-ghost ml-auto hidden",
-                                style: {'fontSize': '20px'},
+                                style: {'fontSize': "20px"},
                                 on: {click: this.onCloseClick}
                             }, "×"),
                         ]),
@@ -122,8 +125,13 @@ if (ddddom) {
     });
     const el = ins.$mount();
     document.body.append(el);
+    appInstance = ins;
 }
 
+
+// ============================================
+// 设置和帮助对话框
+// ============================================
 
 function showSettings() {
     dalert(`设置 - 钉钉文档下载器 v${version}`, this.$createElement(h => {
@@ -211,7 +219,7 @@ function showHelp$About() {
                 h("div", {class: "font-bold"}, "使用方法"),
                 h("ul", {}, [
                     h("li", {class: ""}, "1、勾选你要下载到本地的目录或文件夹。如果你勾选目录，会自动勾选该目录及其子目录下的所有内容。"),
-                    h("li", {class: ""}, "2、点击【下载选中】按钮，选择一个本地目录进行保存。当某个文档名字前面出现了“✅”图标时，说明该文档已经下载完成。"),
+                    h("li", {class: ""}, "2、点击【下载选中】按钮，选择一个本地目录进行保存。当某个文档名字前面出现了✅图标时，说明该文档已经下载完成。"),
                     h("li", {class: "mt-2"}, "【注意事项】1、全部下载完成后，下载到本地的文件目录结构和钉钉文档中的目录结构完全一致。2、工具只会从当前钉钉文档界面开始加载数据，如果你打开的是个目录，那么工具就看不到父目录及更上层的文档。"),
                 ]),
             ]),
@@ -226,37 +234,41 @@ function showHelp$About() {
                         h("li", {class: "text-sm text-zinc-600"}, "3、添加新钉钉文档域名支持。@niezhili"),
                     ])
                 ]),
-                h("div", {class: ""}, [
-                    h("div", {}, "v1.0.2："),
-                    h("ul", {}, [
-                        h("li", {class: "text-sm text-zinc-600"}, "1、新增设置&菜单功能"),
-                        h("li", {class: "text-sm text-zinc-600"}, "2、新增导出其它格式支持，取决于钉钉文档支持哪些导出格式。"),
-                        h("li", {class: "text-sm text-zinc-600"}, "3、升级 tailwindcss 到4.1.4版本。"),
-                        h("li", {class: "text-sm text-zinc-600"}, "4、升级 daisyui 到5.0.23版本。"),
-                    ])
-                ]),
-                h("div", {class: ""}, [
-                    h("div", {}, "v1.0.1："),
-                    h("ul", {}, [
-                        h("li", {class: "text-sm text-zinc-600"}, "1、修复目录下文件过多时，未进行分页加载导致的下载不全问题。"),
-                    ])
-                ]),
-                h("div", {class: ""}, [
-                    h("div", {}, "v1.0.0："),
-                    h("ul", {}, [
-                        h("li", {class: "text-sm text-zinc-600"}, "1、正式发布。"),
-                    ])
-                ]),
             ]),
 
 
             h("div", {class: "mt-4"}, [
                 h("div", {class: "font-bold"}, [
                     h("span", {}, "欢迎您使用本工具，您可以在"),
-                    h("a", {href:"https://github.com/Microanswer/ding-doc-downloader", target:"_blank", style: {color: "var(--color-primary)"}}, " Github "),
+                    h("a", {href:"https://github.com/Microanswer/ding-doc-downloader", target:"blank", style: {color: "var(--color-primary)"}}, " Github "),
                     h("span", {}, "上提出您的建议，如果觉得有帮助期待您的 Star 和推广。")
                 ])
             ])
         ])
     }))
+}
+
+
+// ============================================
+// 消息监听 - 等待插件图标点击
+// ============================================
+
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+    if (request.action === 'showDownloader') {
+        initApp();
+        sendResponse({ status: 'ok' });
+    }
+    return true;
+});
+
+
+// ============================================
+// 开发环境调试（书签脚本模式）
+// ============================================
+
+if (process.env.NODE_ENV === "development") {
+    // 开发模式下自动启动（用于本地调试）
+    setTimeout(() => {
+        initApp();
+    }, 500);
 }
