@@ -1,0 +1,7 @@
+/* 设计 Tokens */
+@import './tokens.css';
+
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

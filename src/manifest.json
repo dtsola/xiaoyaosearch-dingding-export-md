@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "小遥搜索钉钉导出工具",
+  "version": "1.0.0",
+  "description": "一键导出钉钉文档和知识库为Markdown格式",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*.dingtalk.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/index.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.dingtalk.com/*"],
+      "js": ["src/content/index.ts"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_title": "打开导出面板"
+  }
+}
