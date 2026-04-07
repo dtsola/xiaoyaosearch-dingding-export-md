@@ -8,46 +8,404 @@ html {
     scrollbar-gutter: auto !important;
 }
 
+/* ============================================
+   钉钉文档下载器 - 自定义样式
+   ============================================ */
 
-.dddd-menu li a:hover{
-    background-color: color-mix(in oklab, var(--color-base-content) 10%, transparent)!important;
+/* 全局容器 */
+.my-dingdocdownloader {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    overflow: hidden;
 }
 
-
-
-.dddd-menu li a:active{
-    color: var(--dddd-menu-active-fg)!important;
-    background-color: var(--dddd-menu-active-bg)!important;
+/* 标题区域 */
+.dddd-card-title {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
 }
 
-
-input.dddd-checkbox{
-    width: var(--dddd-size) !important;
-    height: var(--dddd-size) !important;
+.dddd-card-title span.font-bold {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1d1d1f;
 }
 
-input.dddd-checkbox-xs{
-    padding: 0.125rem!important;
+.dddd-card-title small {
+    font-size: 13px;
+    color: #86868b;
+    margin-left: 8px;
 }
 
-input.dddd-checkbox-neutral {
-    color: var(--color-neutral-content)!important;
+/* 按钮样式 */
+.dddd-btn {
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 16px;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
 }
 
-.dddd-btn.dddd-btn-primary {
-    color: var(--color-white)!important;
+.dddd-btn-ghost {
+    background: transparent;
+    color: #86868b;
 }
 
-.dddd-menu summary::after{
-    width: 0.5rem!important;
-    height: 0.5rem!important;
+.dddd-btn-ghost:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1d1d1f;
 }
 
+.dddd-btn-primary {
+    background: #007AFF;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+}
+
+.dddd-btn-primary:hover {
+    background: #0051D5;
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.35);
+    transform: translateY(-1px);
+}
+
+.dddd-btn-circle {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 卡片内容区 */
+.dddd-card-body {
+    padding: 20px 24px;
+}
+
+/* 警告提示 */
+.dddd-alert {
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    background: #fff9e6;
+    border: 1px solid #ffe066;
+    color: #d48806;
+}
+
+.dddd-alert div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 操作按钮区域 */
+.dddd-card-actions {
+    padding: 16px 24px;
+    background: #f8f9fa;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    gap: 10px;
+}
+
+/* 下拉菜单 */
+.dddd-menu {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 6px;
+    min-width: 140px;
+}
+
+.dddd-menu li a {
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #1d1d1f;
+    transition: background 0.15s ease;
+}
+
+.dddd-menu li a:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.dddd-menu li a:active {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* 进度条 */
+.dddd-progress {
+    height: 4px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.dddd-progress::-webkit-progress-bar {
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+}
+
+.dddd-progress::-webkit-progress-value {
+    background: linear-gradient(90deg, #007AFF, #34C759);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* 复选框自定义 */
+.dddd-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #c5c5c7;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.dddd-checkbox:hover {
+    border-color: #86868b;
+}
+
+.dddd-checkbox:checked {
+    background: #007AFF;
+    border-color: #007AFF;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E");
+    background-size: 12px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dddd-checkbox-xs {
+    width: 16px;
+    height: 16px;
+}
+
+/* 文档列表 */
 .dddd-menu-sm {
-    :where(li:not(.dddd-menu-title) > *:not(ul, details, .dddd-menu-title)),
-    :where(li:not(.dddd-menu-title) > details > summary:not(.dddd-menu-title)) {
+    background: transparent;
+    padding: 0;
+    list-style: none;
+}
 
-        padding-block: 0.15rem !important;
-        font-size: 0.75rem!important;
-    }
+.dddd-menu-sm ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.dddd-menu-sm li {
+    margin-bottom: 1px;
+}
+
+/* 文件项样式 */
+.file-item-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.file-item-label:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.file-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-name {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+.file-name span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.file-size {
+    color: #86868b;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
+.download-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+/* 文件夹项样式 */
+.folder-item-summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.folder-item-summary:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.folder-item-summary::-webkit-details-marker {
+    display: none;
+}
+
+.folder-item-summary::before {
+    content: "▸";
+    font-size: 12px;
+    color: #86868b;
+    flex-shrink: 0;
+    width: 14px;
+    text-align: center;
+}
+
+.dddd-menu-sm details[open] > .folder-item-summary::before {
+    content: "▾";
+}
+
+.folder-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.folder-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.folder-children {
+    padding-left: 24px;
+    margin-top: 2px;
+}
+
+/* 圆形进度条 */
+.dddd-radial-progress {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: conic-gradient(#007AFF var(--value), rgba(0, 0, 0, 0.1) 0deg);
+    font-size: 10px;
+    font-weight: 600;
+    color: #007AFF;
+}
+
+/* 链接样式 */
+.dddd-link {
+    color: #007AFF;
+    text-decoration: none;
+    font-size: 13px;
+    transition: opacity 0.2s ease;
+}
+
+.dddd-link:hover {
+    opacity: 0.7;
+}
+
+/* 标签文字 */
+.dddd-label-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1d1d1f;
+}
+
+/* 滚动条 */
+.dddd-card-body ::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dddd-card-body ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dddd-card-body ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+.dddd-card-body ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+/* 文件大小文字 */
+.text-zinc-500 {
+    color: #86868b;
+    font-size: 12px;
+}
+
+/* 模态框样式覆盖（dalert 使用） */
+.dddd-modal-box {
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 480px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+}
+
+/* 设置页面样式 */
+.font-bold.text-zinc-500 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #86868b;
+    margin-bottom: 12px;
+}
+
+.flex-col.gap-2 {
+    gap: 8px;
+}
+
+/* 加载动画 */
+.loading-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-top-color: #007AFF;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }

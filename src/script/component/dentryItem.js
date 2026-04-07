@@ -33,17 +33,16 @@ const DentryItem = {
         let title = this.dentryInfo.name + fileSize;
 
         if (!this.dentryInfo.hasChildren) {
-            return h("li", {}, [h("label", {class: "rounded-sm"}, [
-                h("input", {ref: "checkbox", class: "dddd-checkbox dddd-checkbox-xs dddd-checkbox-neutral", type: "checkbox", on: {change: this.onSelectChange}}),
-                h("span", {on: {click: this.onDentryItemClick}, class: "whitespace-nowrap overflow-hidden overflow-ellipsis pointer-events-none", title: title}, [
-                    h("span", {class: "mr-2"}, [
-                        icon,
-                        h("span", {ref: "downloadStat", class: "ml-2 hidden"}, [
-                            h("div", {ref: "downloadProgress", role:"progressbar", class: "dddd-radial-progress text-primary", style: {"--dddd-value": "0", "--size": "12px", "--thickness": "3px"}}, "0%"),
-                            h("span", {ref: "downloadResult", class: "hidden"}, "❗")
-                        ])
-                    ]),
-                    h("span", {}, [this.dentryInfo.name, h("span", {class: "text-zinc-500 float-right"}, [fileSize])])
+            return h("li", {}, [h("label", {class: "file-item-label"}, [
+                h("input", {ref: "checkbox", class: "dddd-checkbox dddd-checkbox-xs", type: "checkbox", on: {change: this.onSelectChange}}),
+                h("span", {class: "file-icon"}, icon),
+                h("span", {class: "file-name"}, [
+                    h("span", {on: {click: this.onDentryItemClick}, title: title}, this.dentryInfo.name),
+                    h("span", {class: "file-size"}, fileSize)
+                ]),
+                h("span", {ref: "downloadStat", class: "download-status hidden"}, [
+                    h("div", {ref: "downloadProgress", role:"progressbar", class: "dddd-radial-progress", style: {"--dddd-value": "0", "--size": "14px", "--thickness": "2px"}}, "0%"),
+                    h("span", {ref: "downloadResult", class: "hidden"}, "❗")
                 ])
             ])]);
         }
@@ -57,22 +56,15 @@ const DentryItem = {
 
         return h("li", {class: ""}, [
             h("details", {ref: "details", open: false, on: {"toggle": this.onChildrenOpenChange}}, [
-                h("summary", {style: {"display": "grid"}}, [
-                    h("input", {ref: "checkbox", class: "dddd-checkbox dddd-checkbox-xs dddd-checkbox-neutral", type: "checkbox", on: {change: this.onSelectChange}}),
-                    h("span", {on: {click: this.onDentryItemClick}, class: "whitespace-nowrap overflow-hidden overflow-ellipsis", title: this.dentryInfo.name}, [
-                        h("span", {class: "mr-2"}, [
-                            h("span", {ref: "diricon"}, icon),
-                            h("Loading", {ref: "loading", class: "hidden"}),
-                            h("span", {ref: "downloadStat", class: "ml-2 hidden"}, [
-                                h("div", {ref: "downloadProgress", role: "progressbar", class: "dddd-radial-progress text-primary", style: {"--dddd-value": "0", "--size": "12px", "--thickness": "3px"}
-                                }, "0%"),
-                                h("span", {ref: "downloadResult", class: "hidden"}, "❗")
-                            ])
-                        ]),
-                        h("span", {}, [this.dentryInfo.name])
-                    ])
+                h("summary", {class: "folder-item-summary"}, [
+                    h("input", {ref: "checkbox", class: "dddd-checkbox dddd-checkbox-xs", type: "checkbox", on: {change: this.onSelectChange}}),
+                    h("span", {class: "folder-icon"}, [
+                        h("span", {ref: "diricon"}, icon),
+                        h("Loading", {ref: "loading", class: "hidden"})
+                    ]),
+                    h("span", {class: "folder-name", on: {click: this.onDentryItemClick}, title: this.dentryInfo.name}, this.dentryInfo.name)
                 ]),
-                h("ul", {ref: "children"}, childrenDom)
+                h("ul", {ref: "children", class: "folder-children"}, childrenDom)
             ])])
     },
     methods: {

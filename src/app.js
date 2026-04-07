@@ -29,53 +29,53 @@ function initApp() {
         render(h) {
             const dom =
                 h("div", {
-                    class: "my-dingdocdownloader ddddddoc-root dddd-card bg-base-100 shadow-xl border border-zinc-300",
-                    style: {position: "fixed", right: "20px", bottom: "20px", zIndex: "10", width: "32rem"}
+                    class: "my-dingdocdownloader ddddddoc-root dddd-card",
+                    style: {position: "fixed", right: "20px", bottom: "20px", zIndex: "10", width: "42rem"}
                 }, [
-                    h("div", {class: "dddd-card-body"}, [
-                        h("h2", {class: "dddd-card-title flex flex-row"}, [
+                    h("div", {class: "dddd-card-body", style: {padding: 0}}, [
+                        h("h2", {class: "dddd-card-title flex flex-row", style: {gap: "12px"}}, [
                             h("span", {class: "font-bold"}, `钉钉文档下载器`),
-                            h("small", {class: "align-bottom"}, `v${version}`),
+                            h("small", {class: ""}, `v${version}`),
                             h("div", {class: "flex-grow"}, []),
 
                             h("button", {
                                 title: "帮助&关于",
                                 type: "button",
-                                class: "dddd-btn dddd-btn-sm dddd-btn-xs dddd-btn-circle dddd-btn-ghost ml-auto",
-                                style: {'fontSize': '13px'},
+                                class: "dddd-btn dddd-btn-circle dddd-btn-ghost",
+                                style: {width: "28px", height: "28px", fontSize: "14px"},
                                 on: {click: this.onAboutClick}
                             }, "?"),
                             h("details", {ref: "menubtn", class: "dddd-dropdown dddd-dropdown-end hidden"}, [
-                                h("summary", {class: "dddd-btn dddd-btn-ghost dddd-btn-xs dddd-btn-circle", title: "菜单", style: {display: "grid", fontSize: '14px'}}, "≡"),
-                                h("ul", {class: "dddd-menu dddd-dropdown-content bg-base-100 rounded-box z-1 w-32 p-2 shadow-sm"}, [
-                                    h("li", {class: "rounded-sm hover:bg-zinc-200"}, [h("a", {on: {click: this.onSettingsClick}}, "设置")]),
-                                    h("li", {class: "rounded-sm hover:bg-zinc-200"}, [h("a", {on: {click: this.onAboutClick}}, "帮助&关于")])
+                                h("summary", {class: "dddd-btn dddd-btn-ghost dddd-btn-circle", title: "菜单", style: {width: "28px", height: "28px", fontSize: "14px"}}, "≡"),
+                                h("ul", {class: "dddd-menu dddd-dropdown-content z-1"}, [
+                                    h("li", {}, [h("a", {on: {click: this.onSettingsClick}}, "设置")]),
+                                    h("li", {}, [h("a", {on: {click: this.onAboutClick}}, "帮助&关于")])
                                 ])
                             ]),
                             h("button", {
                                 title: "关闭",
                                 ref: "close",
                                 type: "button",
-                                class: "dddd-btn dddd-btn-sm dddd-btn-xs dddd-btn-circle dddd-btn-ghost ml-auto hidden",
-                                style: {'fontSize': "20px"},
+                                class: "dddd-btn dddd-btn-circle dddd-btn-ghost hidden",
+                                style: {width: "28px", height: "28px", fontSize: "18px"},
                                 on: {click: this.onCloseClick}
                             }, "×"),
                         ]),
-                        h("div", {ref: "container"}, [
-                            h("p", null, "欢迎您使用钉钉文档下载器，点击【开始】按钮选择你要下载的文档。"),
-                            h("div", {class: "mt-2 dddd-alert dddd-alert-warning", role: "alert"}, [
-                                h("div", {class: "h-6 w-6 shrink-0 stroke-current", style:{fontSize: "19px"}}, "⚠"),
-                                h("span", {class: ""}, "本工具仅作学习交流，请勿商用。由本工具造成的任何损失由用户自身承担，点击开始表示同意本政策。")
+                        h("div", {ref: "container", style: {padding: "0 24px 20px"}}, [
+                            h("p", {style: {fontSize: "14px", color: "#86868b", lineHeight: "1.6", marginBottom: "16px"}}, "欢迎使用钉钉文档下载器，点击下方按钮开始批量下载文档。"),
+                            h("div", {class: "dddd-alert", role: "alert"}, [
+                                h("div", {style: {fontSize: "16px", marginRight: "10px"}}, "⚠"),
+                                h("span", {}, "本工具仅供学习交流使用，请勿用于商业用途。使用风险自负。")
                             ])
                         ]),
-                        h("div", {ref: "cardactions", class: "dddd-card-actions justify-end"}, [
+                        h("div", {ref: "cardactions", class: "dddd-card-actions", style: {justifyContent: "flex-end"}}, [
                             h("button", {
                                 ref: "actionBtnStart",
                                 type: "button",
-                                class: "dddd-btn dddd-btn-primary text-white",
+                                class: "dddd-btn dddd-btn-primary",
                                 on: {click: this.onStartClick}
-                            }, "开始"),
-                            h("button", {type: "button", class: "dddd-btn", on: {click: this.onExitClick}}, "退出")
+                            }, "开始下载"),
+                            h("button", {type: "button", class: "dddd-btn dddd-btn-ghost", on: {click: this.onExitClick}}, "退出")
                         ])
                     ])
                 ]);
@@ -135,8 +135,8 @@ function initApp() {
 
 function showSettings() {
     dalert(`设置 - 钉钉文档下载器 v${version}`, this.$createElement(h => {
-        return h("div", {class: ""}, [
-            h("div", {class: "font-bold text-zinc-500 mb-1"}, "导出格式"),
+        return h("div", {}, [
+            h("div", {style: {fontSize: "15px", fontWeight: "600", marginBottom: "16px", color: "#1d1d1f"}}, "导出格式"),
             h("ul", {class: "flex flex-col gap-2 select-none"}, [
 
                 h("CellRadios", {
@@ -160,8 +160,8 @@ function showSettings() {
                     }}
                 }),
                 h("li", {ref: "mdtip", class: getCfg(CFG_KEY.EXPORT_ADOC_AS, ".docx") === ".md" ? "" : "hidden"}, [
-                    h("div", {class: "mb-2 p-4 bg-amber-400 rounded rounded-md text-sm"}, [
-                        h("div", {class: ""}, "您选择了导出为 .md 格式。钉钉文档有许多功能无法完全在Markdown上呈现，比如：文档内附件、文档内流程图等，如果某文档中存在这些内容，那么在导出的md文件中会显示为不支持，并提供原钉钉文档链接。建议选择导出格式为 .docx 或 .pdf"),
+                    h("div", {style: {marginBottom: "12px", padding: "12px 14px", background: "#fff9e6", borderRadius: "10px", fontSize: "13px", lineHeight: "1.5"}}, [
+                        h("div", {}, "您选择了导出为 .md 格式。钉钉文档有许多功能无法完全在Markdown上呈现，比如：文档内附件、文档内流程图等。建议选择导出格式为 .docx 或 .pdf。"),
                     ])
                 ]),
                 h("CellRadios", {
@@ -198,8 +198,8 @@ function showSettings() {
                     on: {change: (newOp) => {setCfg(CFG_KEY.EXPORT_AMIND_AS, newOp.value)}}
                 }),
 
-                h("li", {class: "flex flex-row justify-between items-center px-3 py-1 bg-zinc-100 rounded-sm"}, [
-                    h("div", {class: "text-xs text-zinc-600"}, "多维表格及快捷方式不支持导出。其它不属于钉钉体系文档的文件按原文件导出。"),
+                h("li", {style: {display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", background: "#f8f9fa", borderRadius: "10px", fontSize: "12px", color: "#86868b"}}, [
+                    h("div", {}, "多维表格及快捷方式不支持导出，其它文件按原文件导出。"),
                 ]),
             ]),
         ])
@@ -209,40 +209,38 @@ function showSettings() {
 function showHelp$About() {
     dalert(`帮助&关于 - 钉钉文档下载器 v${version}`, this.$createElement(h => {
         return h("div", {}, [
-            h("div", {class: "dddd-alert dddd-alert-warning mt-0", role: "alert"}, [
-                h("div", {class: "h-6 w-6 shrink-0 stroke-current", style:{fontSize: "19px"}}, "⚠"),
-                h("small", {}, "本工具仅作学习交流，请勿商用。由本工具造成的任何损失由用户自身承担，点击了开始表示您已同意本政策。")
+            h("div", {class: "dddd-alert", role: "alert", style: {marginBottom: "16px"}}, [
+                h("div", {style: {fontSize: "16px", marginRight: "10px"}}, "⚠"),
+                h("small", {style: {fontSize: "13px"}}, "本工具仅供学习交流使用，请勿用于商业用途。使用风险自负。"),
             ]),
 
 
-            h("div", {class: "mt-4"}, [
-                h("div", {class: "font-bold"}, "使用方法"),
-                h("ul", {}, [
-                    h("li", {class: ""}, "1、勾选你要下载到本地的目录或文件夹。如果你勾选目录，会自动勾选该目录及其子目录下的所有内容。"),
-                    h("li", {class: ""}, "2、点击【下载选中】按钮，选择一个本地目录进行保存。当某个文档名字前面出现了✅图标时，说明该文档已经下载完成。"),
-                    h("li", {class: "mt-2"}, "【注意事项】1、全部下载完成后，下载到本地的文件目录结构和钉钉文档中的目录结构完全一致。2、工具只会从当前钉钉文档界面开始加载数据，如果你打开的是个目录，那么工具就看不到父目录及更上层的文档。"),
+            h("div", {style: {marginBottom: "16px"}}, [
+                h("div", {style: {fontSize: "15px", fontWeight: "600", marginBottom: "10px", color: "#1d1d1f"}}, "使用方法"),
+                h("ul", {style: {fontSize: "14px", lineHeight: "1.6", color: "#424245", paddingLeft: "20px"}}, [
+                    h("li", {style: {marginBottom: "8px"}}, "勾选你要下载到本地的目录或文件夹。如果你勾选目录，会自动勾选该目录及其子目录下的所有内容。"),
+                    h("li", {style: {marginBottom: "8px"}}, "点击【下载选中】按钮，选择一个本地目录进行保存。当某个文档名字前面出现了✅图标时，说明该文档已经下载完成。"),
+                    h("li", {style: {fontSize: "12px", color: "#86868b"}}, "【注意事项】全部下载完成后，下载到本地的文件目录结构和钉钉文档中的目录结构完全一致。工具只会从当前钉钉文档界面开始加载数据。"),
                 ]),
             ]),
 
-            h("div", {class: "mt-4"}, [
-                h("div", {class: "font-bold"}, "版本变更记录"),
-                h("div", {class: ""}, [
+            h("div", {style: {marginBottom: "16px"}}, [
+                h("div", {style: {fontSize: "15px", fontWeight: "600", marginBottom: "8px", color: "#1d1d1f"}}, "版本变更记录"),
+                h("div", {style: {fontSize: "13px"}}, [
                     h("div", {}, "v1.0.0："),
-                    h("ul", {}, [
-                        h("li", {class: "text-sm text-zinc-600"}, "1、修复钉钉文档下载为pdf在没有水印的情况下出错。"),
-                        h("li", {class: "text-sm text-zinc-600"}, "2、修复文件名中数字被抹除的问题。"),
-                        h("li", {class: "text-sm text-zinc-600"}, "3、添加新钉钉文档域名支持。@niezhili"),
+                    h("ul", {style: {fontSize: "13px", lineHeight: "1.5", color: "#424245", paddingLeft: "20px"}}, [
+                        h("li", {style: {color: "#86868b"}}, "修复钉钉文档下载为pdf在没有水印的情况下出错。"),
+                        h("li", {style: {color: "#86868b"}}, "修复文件名中数字被抹除的问题。"),
+                        h("li", {style: {color: "#86868b"}}, "添加新钉钉文档域名支持。@niezhili"),
                     ])
                 ]),
             ]),
 
 
-            h("div", {class: "mt-4"}, [
-                h("div", {class: "font-bold"}, [
-                    h("span", {}, "欢迎您使用本工具，您可以在"),
-                    h("a", {href:"https://github.com/Microanswer/ding-doc-downloader", target:"blank", style: {color: "var(--color-primary)"}}, " Github "),
-                    h("span", {}, "上提出您的建议，如果觉得有帮助期待您的 Star 和推广。")
-                ])
+            h("div", {style: {fontSize: "14px", lineHeight: "1.6", color: "#424245"}}, [
+                h("div", {style: {marginBottom: "8px", fontWeight: "500"}}, "欢迎您使用本工具，您可以在"),
+                h("a", {href:"https://github.com/Microanswer/ding-doc-downloader", target:"blank", style: {color: "#007AFF", textDecoration: "none"}}, " GitHub "),
+                h("span", {}, "上提出您的建议。"),
             ])
         ])
     }))

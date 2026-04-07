@@ -8,17 +8,17 @@ const DingTalkDomains = ["alidocs.dingtalk.com"/*旧*/, "docs.dingtalk.com"]; //
 
 export default {
     render(h) {
-        return h("div", {}, [
-            h("div", {class: "dddd-label px-0 mb-2 flex flex-row items-center justify-between"}, [
-                h("div", {ref:"progressTip", class: "dddd-label-text text-black"}, "我的文档"),
-                h("div", {ref: "btnArea", class: "dddd-label-text"}, [
-                    h("a", {ref: "downloadBtn", class: "dddd-btn dddd-btn-xs hidden", on: {click: this.onDownloadClick}}, "下载选中"),
-                    h("a", {ref: "reloadBtn", class: "dddd-link dddd-link-accent hidden", on: {click: this.reload}}, "重新加载")
+        return h("div", {style: {padding: "0 24px"}}, [
+            h("div", {class: "flex flex-row items-center justify-between", style: {marginBottom: "12px"}}, [
+                h("div", {ref:"progressTip", style: {fontSize: "15px", fontWeight: "600", color: "#1d1d1f"}}, "我的文档"),
+                h("div", {ref: "btnArea", style: {display: "flex", gap: "8px"}}, [
+                    h("button", {ref: "downloadBtn", class: "dddd-btn dddd-btn-primary hidden", style: {padding: "6px 12px", fontSize: "13px"}, on: {click: this.onDownloadClick}}, "下载选中"),
+                    h("a", {ref: "reloadBtn", class: "dddd-link hidden", on: {click: this.reload}}, "重新加载")
                 ])
             ]),
-            h("div", {class: "overflow-auto", style: {maxHeight: "700px"}}, [
-                h("progress", {ref: "progress", class: "dddd-progress"}, []),
-                h("ul", {ref: "list", class: "dddd-menu dddd-menu-sm bg-base-200 rounded-lg w-full hidden"}, this.dentrys.map(dentryInfo => {
+            h("div", {class: "overflow-auto", style: {maxHeight: "520px", paddingRight: "8px"}}, [
+                h("progress", {ref: "progress", class: "dddd-progress", style: {width: "100%"}}, []),
+                h("ul", {ref: "list", class: "dddd-menu dddd-menu-sm w-full hidden"}, this.dentrys.map(dentryInfo => {
                     return h("DentryItem", {ref: "di", props: () => ({dentryInfo: dentryInfo}), on: {selectChange: this.onDentrySelectChange}})
                 }))
             ])
