@@ -39,7 +39,7 @@ const DentryItem = {
                     h("span", {class: "mr-2"}, [
                         icon,
                         h("span", {ref: "downloadStat", class: "ml-2 hidden"}, [
-                            h("div", {ref: "downloadProgress", role:"progressbar", class: "dddd-radial-progress text-primary", style: {"--dddd-value": "0", "--dddd-size": "12px", "--dddd-thickness": "3px"}}, []),
+                            h("div", {ref: "downloadProgress", role:"progressbar", class: "dddd-radial-progress text-primary", style: {"--dddd-value": "0", "--size": "12px", "--thickness": "3px"}}, "0%"),
                             h("span", {ref: "downloadResult", class: "hidden"}, "❗")
                         ])
                     ]),
@@ -64,8 +64,8 @@ const DentryItem = {
                             h("span", {ref: "diricon"}, icon),
                             h("Loading", {ref: "loading", class: "hidden"}),
                             h("span", {ref: "downloadStat", class: "ml-2 hidden"}, [
-                                h("div", {ref: "downloadProgress", role: "progressbar", class: "dddd-radial-progress text-primary", style: {"--dddd-value": "0", "--dddd-size": "12px", "--dddd-thickness": "3px"}
-                                }, []),
+                                h("div", {ref: "downloadProgress", role: "progressbar", class: "dddd-radial-progress text-primary", style: {"--dddd-value": "0", "--size": "12px", "--thickness": "3px"}
+                                }, "0%"),
                                 h("span", {ref: "downloadResult", class: "hidden"}, "❗")
                             ])
                         ]),
@@ -264,7 +264,9 @@ const DentryItem = {
                                 // console.log("开始下载")
                             } else if (progressStat.type === "pending") {
                                 // console.log("下载中" + progressStat.percent);
-                                this.$refs.downloadProgress.style.setProperty("--dddd-value", String(Math.round(progressStat.percent * 0.75) + 25));
+                                let percent = Math.round(progressStat.percent * 0.75) + 25;
+                                this.$refs.downloadProgress.style.setProperty("--dddd-value", String(percent));
+                                this.$refs.downloadProgress.textContent = percent + "%";
                             } else if (progressStat.type === "success") {
                                 // console.log("下载中完成");
                                 this.$refs.downloadProgress.classList.add("hidden");
