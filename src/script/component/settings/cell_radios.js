@@ -43,6 +43,6 @@ export default {
         }
     },
     data: {
-        mValue: this.defaultValue,
+        mValue: "",
     }
 }
