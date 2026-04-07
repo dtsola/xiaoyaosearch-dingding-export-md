@@ -34,10 +34,17 @@ function initApp() {
                 }, [
                     h("div", {class: "dddd-card-body", style: {padding: 0}}, [
                         h("h2", {class: "dddd-card-title flex flex-row", style: {gap: "12px"}}, [
-                            h("span", {class: "font-bold"}, `钉钉文档下载器`),
+                            h("span", {class: "font-bold"}, `小遥搜索 - 钉钉导出`),
                             h("small", {class: ""}, `v${version}`),
                             h("div", {class: "flex-grow"}, []),
 
+                            h("button", {
+                                title: "设置",
+                                type: "button",
+                                class: "dddd-btn dddd-btn-circle dddd-btn-ghost",
+                                style: {width: "28px", height: "28px", fontSize: "14px"},
+                                on: {click: this.onSettingsClick}
+                            }, "⚙"),
                             h("button", {
                                 title: "帮助&关于",
                                 type: "button",
@@ -45,13 +52,6 @@ function initApp() {
                                 style: {width: "28px", height: "28px", fontSize: "14px"},
                                 on: {click: this.onAboutClick}
                             }, "?"),
-                            h("details", {ref: "menubtn", class: "dddd-dropdown dddd-dropdown-end hidden"}, [
-                                h("summary", {class: "dddd-btn dddd-btn-ghost dddd-btn-circle", title: "菜单", style: {width: "28px", height: "28px", fontSize: "14px"}}, "≡"),
-                                h("ul", {class: "dddd-menu dddd-dropdown-content z-1"}, [
-                                    h("li", {}, [h("a", {on: {click: this.onSettingsClick}}, "设置")]),
-                                    h("li", {}, [h("a", {on: {click: this.onAboutClick}}, "帮助&关于")])
-                                ])
-                            ]),
                             h("button", {
                                 title: "关闭",
                                 ref: "close",
@@ -96,7 +96,7 @@ function initApp() {
                                 ])
                             ]),
 
-                            h("p", {style: {fontSize: "14px", color: "#86868b", lineHeight: "1.6", marginBottom: "16px"}}, "欢迎使用钉钉文档下载器，点击下方按钮开始批量下载文档。"),
+                            h("p", {style: {fontSize: "14px", color: "#86868b", lineHeight: "1.6", marginBottom: "16px"}}, "欢迎使用小遥搜索钉钉导出工具，点击下方按钮开始批量导出文档。"),
                             h("div", {class: "dddd-alert", role: "alert"}, [
                                 h("div", {style: {fontSize: "16px", marginRight: "10px"}}, "⚠"),
                                 h("span", {}, "本工具仅供学习交流使用，请勿用于商业用途。使用风险自负。")
@@ -108,7 +108,7 @@ function initApp() {
                                 type: "button",
                                 class: "dddd-btn dddd-btn-primary",
                                 on: {click: this.onStartClick}
-                            }, "开始下载"),
+                            }, "开始导出"),
                             h("button", {type: "button", class: "dddd-btn dddd-btn-ghost", on: {click: this.onExitClick}}, "退出")
                         ])
                     ])
@@ -127,7 +127,6 @@ function initApp() {
 
                 this.$refs.cardactions.classList.add("hidden");
                 this.$refs.close.classList.remove("hidden");
-                this.$refs.menubtn.classList.remove("hidden");
 
                 this.$refs.container.innerHTML = "";
                 let main = this.$createElement(function (h) {
@@ -136,16 +135,14 @@ function initApp() {
                 this.$refs.container.append(main);
             },
             onCloseClick() {
-                dconfirm("提示信息", "你确定要关闭钉钉文档下载工具吗？", () => {
+                dconfirm("提示信息", "你确定要关闭本工具吗？", () => {
                     this.exit();
                 });
             },
             onSettingsClick(){
-                this.$refs.menubtn.removeAttribute("open");
                 showSettings.call(this);
             },
             onAboutClick() {
-                this.$refs.menubtn.removeAttribute("open");
                 showHelp$About.call(this);
             },
             onExitClick() {
@@ -168,7 +165,7 @@ function initApp() {
 // ============================================
 
 function showSettings() {
-    dalert(`设置 - 钉钉文档下载器 v${version}`, this.$createElement(h => {
+    dalert(`设置 - 小遥搜索钉钉导出 v${version}`, this.$createElement(h => {
         return h("div", {}, [
             h("div", {style: {fontSize: "15px", fontWeight: "600", marginBottom: "16px", color: "#1d1d1f"}}, "导出格式"),
             h("ul", {class: "flex flex-col gap-2 select-none"}, [
@@ -298,25 +295,42 @@ function showHelp$About() {
 
             // 作者信息
             h("div", {style: {marginBottom: "16px"}}, [
-                h("div", {style: {fontSize: "15px", fontWeight: "600", marginBottom: "8px", color: "#1d1d1f"}}, "关于作者"),
-                h("div", {style: {fontSize: "13px"}}, [
-                    h("div", {style: {marginBottom: "6px"}}, "dtsola — IT解决方案架构师 | 一人公司实践者"),
-                    h("div", {style: {fontSize: "12px", color: "#86868b"}}, [
-                        h("a", {
-                            href: "https://www.dtsola.com",
-                            target: "_blank",
-                            style: {color: "#007AFF", textDecoration: "none", marginRight: "12px"}
-                        }, "个人网站"),
-                        h("a", {
-                            href: "https://space.bilibili.com/736015",
-                            target: "_blank",
-                            style: {color: "#007AFF", textDecoration: "none", marginRight: "12px"}
-                        }, "B站"),
-                        h("a", {
-                            href: "https://github.com/dtsola",
-                            target: "_blank",
-                            style: {color: "#007AFF", textDecoration: "none"}
-                        }, "GitHub"),
+                h("div", {style: {fontSize: "15px", fontWeight: "600", marginBottom: "12px", color: "#1d1d1f"}}, "关于作者"),
+                h("div", {style: {display: "flex", alignItems: "flex-start", gap: "16px"}}, [
+                    // 作者头像
+                    h("img", {
+                        src: chrome.runtime.getURL("images/author-avatar.jpg"),
+                        alt: "dtsola",
+                        style: {
+                            width: "80px",
+                            height: "80px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            flexShrink: 0,
+                            border: "2px solid rgba(0, 0, 0, 0.08)"
+                        }
+                    }),
+                    // 作者信息
+                    h("div", {style: {flex: 1}}, [
+                        h("div", {style: {fontWeight: "600", marginBottom: "4px", color: "#1d1d1f"}}, "dtsola"),
+                        h("div", {style: {fontSize: "12px", color: "#86868b", marginBottom: "8px"}}, "IT解决方案架构师 | 一人公司实践者"),
+                        h("div", {style: {fontSize: "12px"}}, [
+                            h("a", {
+                                href: "https://www.dtsola.com",
+                                target: "_blank",
+                                style: {color: "#007AFF", textDecoration: "none", marginRight: "12px"}
+                            }, "个人网站"),
+                            h("a", {
+                                href: "https://space.bilibili.com/736015",
+                                target: "_blank",
+                                style: {color: "#007AFF", textDecoration: "none", marginRight: "12px"}
+                            }, "B站"),
+                            h("a", {
+                                href: "https://github.com/dtsola",
+                                target: "_blank",
+                                style: {color: "#007AFF", textDecoration: "none"}
+                            }, "GitHub"),
+                        ])
                     ])
                 ]),
             ]),

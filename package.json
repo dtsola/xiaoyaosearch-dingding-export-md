@@ -1,7 +1,7 @@
 {
   "name": "xiaoyaosearch-dingding-export-md",
   "version": "1.0.0",
-  "description": "",
+  "description": "小遥搜索生态 - 钉钉文档导出工具，批量导出钉钉文档/知识库",
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development vite",

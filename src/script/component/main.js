@@ -1,7 +1,6 @@
 import DentryItem from "./dentryItem.js";
 import { getDocList, getSpaceInfo } from "../api.js";
 import { dalert } from "./dialog.js";
-import { showHelpDialog } from "./helpDialog.js";
 import version from "../version.js";
 
 const DingTalkDomains = ["alidocs.dingtalk.com"/*旧*/, "docs.dingtalk.com"]; // 新版钉钉文档域名(同时也要兼容旧版本)
@@ -43,12 +42,7 @@ export default {
                         class: "dddd-btn dddd-btn-primary hidden",
                         style: {padding: "6px 12px", fontSize: "13px"},
                         on: {click: this.onDownloadClick}
-                    }, "下载选中"),
-                    h("button", {
-                        class: "dddd-btn dddd-btn-circle dddd-btn-ghost",
-                        style: {width: "28px", height: "28px", fontSize: "16px"},
-                        on: {click: this.onHelpClick}
-                    }, "?")
+                    }, "下载选中")
                 ])
             ]),
             h("div", {class: "overflow-auto", style: {maxHeight: "520px", paddingRight: "8px"}}, [
@@ -68,9 +62,6 @@ export default {
         this.readCurrentPage();
     },
     methods: {
-        onHelpClick() {
-            showHelpDialog();
-        },
         readCurrentPage() {
             this.$refs.progressTip.classList.remove("text-error");
             this.$refs.progressTip.textContent = "正在读取当前页面...";
@@ -203,7 +194,7 @@ export default {
         },
         showWarnMap(warnMap) {
 
-            dalert(`已导出勾选的 - 但请您注意 - 钉钉文档下载器 v${version}`, this.$createElement(h => {
+            dalert(`已导出勾选的 - 但请您注意 - 小遥搜索 - 钉钉导出 v${version}`, this.$createElement(h => {
                 return h("div", {}, [
                     // 小遥搜索推广区域
                     h("div", {
