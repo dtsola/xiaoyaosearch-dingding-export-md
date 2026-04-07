@@ -7,13 +7,17 @@
     "dev": "cross-env NODE_ENV=development vite",
     "build": "cross-env NODE_ENV=production vite build",
     "build:dev": "cross-env NODE_ENV=development vite build --mode development",
+    "build:ext": "vite build --config vite.config.ext.js && node scripts/fix-manifest.js",
+    "dev:ext": "vite build --config vite.config.ext.js --watch",
     "preview": "vite preview"
   },
   "author": "dtsola",
   "license": "MIT",
   "devDependencies": {
+    "@crxjs/vite-plugin": "^2.4.0",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@tailwindcss/postcss": "^4.1.4",
+    "@types/node": "^25.5.2",
     "autoprefixer": "^10.4.20",
     "cross-env": "^7.0.3",
     "cssnano": "^7.0.6",

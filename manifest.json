@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "钉钉文档下载器",
+  "version": "1.0.0",
+  "description": "批量下载钉钉文档，支持导出为 docx、pdf、md、xlsx 等格式",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://alidocs.dingtalk.com/*",
+    "https://docs.dingtalk.com/*"
+  ],
+  "icons": {
+    "128": "icons/icon.svg"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://alidocs.dingtalk.com/*",
+        "https://docs.dingtalk.com/*"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

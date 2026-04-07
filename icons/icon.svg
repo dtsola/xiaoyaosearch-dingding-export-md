@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="20" fill="#0089FF"/>
+  <path d="M64 32 L64 48 M64 80 L64 96 M48 64 L64 64 L80 64" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <text x="64" y="110" font-family="Arial" font-size="14" fill="white" text-anchor="middle">钉钉下载</text>
+</svg>
