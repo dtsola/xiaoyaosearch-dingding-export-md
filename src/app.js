@@ -62,6 +62,40 @@ function initApp() {
                             }, "×"),
                         ]),
                         h("div", {ref: "container", style: {padding: "0 24px 20px"}}, [
+                            // 小遥搜索推广
+                            h("div", {
+                                style: {
+                                    marginBottom: "16px",
+                                    padding: "14px",
+                                    background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)",
+                                    border: "1px solid #0ea5e9",
+                                    borderRadius: "10px"
+                                }
+                            }, [
+                                h("div", {style: {display: "flex", alignItems: "center", gap: "10px"}}, [
+                                    h("span", {style: {fontSize: "20px"}}, "🔍"),
+                                    h("div", {style: {flex: 1}}, [
+                                        h("div", {style: {fontSize: "13px", fontWeight: "600", color: "#0c4a6e", marginBottom: "4px"}}, "配合小遥搜索，实现本地 AI 搜索"),
+                                        h("div", {style: {fontSize: "12px", color: "#0369a1"}}, "导出后导入小遥搜索，像聊天一样找到任何文件"),
+                                        h("a", {
+                                            href: "https://github.com/dtsola/xiaoyaosearch",
+                                            target: "_blank",
+                                            style: {
+                                                fontSize: "12px",
+                                                color: "#0284c7",
+                                                textDecoration: "none",
+                                                display: "inline-block",
+                                                marginTop: "6px",
+                                                padding: "4px 12px",
+                                                background: "white",
+                                                borderRadius: "6px",
+                                                border: "1px solid #0ea5e9"
+                                            }
+                                        }, "了解小遥搜索 →")
+                                    ])
+                                ])
+                            ]),
+
                             h("p", {style: {fontSize: "14px", color: "#86868b", lineHeight: "1.6", marginBottom: "16px"}}, "欢迎使用钉钉文档下载器，点击下方按钮开始批量下载文档。"),
                             h("div", {class: "dddd-alert", role: "alert"}, [
                                 h("div", {style: {fontSize: "16px", marginRight: "10px"}}, "⚠"),
@@ -207,14 +241,52 @@ function showSettings() {
 }
 
 function showHelp$About() {
-    dalert(`帮助&关于 - 钉钉文档下载器 v${version}`, this.$createElement(h => {
+    dalert(`帮助&关于 v${version}`, this.$createElement(h => {
         return h("div", {}, [
+            // 小遥搜索生态推广区域
+            h("div", {
+                style: {
+                    marginBottom: "16px",
+                    padding: "14px",
+                    background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)",
+                    border: "1px solid #0ea5e9",
+                    borderRadius: "10px"
+                }
+            }, [
+                h("div", {style: {display: "flex", alignItems: "flex-start", gap: "10px", marginBottom: "12px"}}, [
+                    h("span", {style: {fontSize: "20px"}}, "🔍"),
+                    h("div", {style: {flex: 1}}, [
+                        h("div", {style: {fontSize: "14px", fontWeight: "600", color: "#0c4a6e", marginBottom: "4px"}}, "小遥搜索 - 本地 AI 搜索"),
+                        h("div", {style: {fontSize: "12px", color: "#0369a1", lineHeight: "1.6"}}, [
+                            "听懂你的话、看懂你的图，用 AI 找到本地任何文件"
+                        ]),
+                        h("div", {style: {marginTop: "8px"}}, [
+                            h("a", {
+                                href: "https://github.com/dtsola/xiaoyaosearch",
+                                target: "_blank",
+                                style: {
+                                    fontSize: "12px",
+                                    color: "#0284c7",
+                                    textDecoration: "none",
+                                    display: "inline-block",
+                                    padding: "4px 12px",
+                                    background: "white",
+                                    borderRadius: "6px",
+                                    border: "1px solid #0ea5e9"
+                                }
+                            }, "立即了解 →")
+                        ])
+                    ])
+                ])
+            ]),
+
+            // 免责声明
             h("div", {class: "dddd-alert", role: "alert", style: {marginBottom: "16px"}}, [
                 h("div", {style: {fontSize: "16px", marginRight: "10px"}}, "⚠"),
                 h("small", {style: {fontSize: "13px"}}, "本工具仅供学习交流使用，请勿用于商业用途。使用风险自负。"),
             ]),
 
-
+            // 使用方法
             h("div", {style: {marginBottom: "16px"}}, [
                 h("div", {style: {fontSize: "15px", fontWeight: "600", marginBottom: "10px", color: "#1d1d1f"}}, "使用方法"),
                 h("ul", {style: {fontSize: "14px", lineHeight: "1.6", color: "#424245", paddingLeft: "20px"}}, [
@@ -224,22 +296,35 @@ function showHelp$About() {
                 ]),
             ]),
 
+            // 作者信息
             h("div", {style: {marginBottom: "16px"}}, [
-                h("div", {style: {fontSize: "15px", fontWeight: "600", marginBottom: "8px", color: "#1d1d1f"}}, "版本变更记录"),
+                h("div", {style: {fontSize: "15px", fontWeight: "600", marginBottom: "8px", color: "#1d1d1f"}}, "关于作者"),
                 h("div", {style: {fontSize: "13px"}}, [
-                    h("div", {}, "v1.0.0："),
-                    h("ul", {style: {fontSize: "13px", lineHeight: "1.5", color: "#424245", paddingLeft: "20px"}}, [
-                        h("li", {style: {color: "#86868b"}}, "修复钉钉文档下载为pdf在没有水印的情况下出错。"),
-                        h("li", {style: {color: "#86868b"}}, "修复文件名中数字被抹除的问题。"),
-                        h("li", {style: {color: "#86868b"}}, "添加新钉钉文档域名支持。@niezhili"),
+                    h("div", {style: {marginBottom: "6px"}}, "dtsola — IT解决方案架构师 | 一人公司实践者"),
+                    h("div", {style: {fontSize: "12px", color: "#86868b"}}, [
+                        h("a", {
+                            href: "https://www.dtsola.com",
+                            target: "_blank",
+                            style: {color: "#007AFF", textDecoration: "none", marginRight: "12px"}
+                        }, "个人网站"),
+                        h("a", {
+                            href: "https://space.bilibili.com/736015",
+                            target: "_blank",
+                            style: {color: "#007AFF", textDecoration: "none", marginRight: "12px"}
+                        }, "B站"),
+                        h("a", {
+                            href: "https://github.com/dtsola",
+                            target: "_blank",
+                            style: {color: "#007AFF", textDecoration: "none"}
+                        }, "GitHub"),
                     ])
                 ]),
             ]),
 
-
+            // 链接
             h("div", {style: {fontSize: "14px", lineHeight: "1.6", color: "#424245"}}, [
                 h("div", {style: {marginBottom: "8px", fontWeight: "500"}}, "欢迎您使用本工具，您可以在"),
-                h("a", {href:"https://github.com/Microanswer/ding-doc-downloader", target:"blank", style: {color: "#007AFF", textDecoration: "none"}}, " GitHub "),
+                h("a", {href:"https://github.com/dtsola/xiaoyaosearch-dingding-export-md", target:"blank", style: {color: "#007AFF", textDecoration: "none"}}, " GitHub "),
                 h("span", {}, "上提出您的建议。"),
             ])
         ])
