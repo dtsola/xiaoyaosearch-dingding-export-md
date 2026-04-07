@@ -1,33 +1,27 @@
 import { defineConfig } from 'vite';
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  // 构建配置
   build: {
-    rollupOptions: {
-      input: {
-        'content': 'src/content/index.js',
-        'popup': 'src/popup/index.html'
-      },
-      output: {
-        entryFileNames: (chunkInfo) => {
-          // Content Script 输出为 content.js
-          if (chunkInfo.name === 'content') {
-            return 'content.js';
-          }
-          return '[name].js';
-        },
-        chunkFileNames: '[name].js',
-        assetFileNames: '[name].[ext]'
-      }
-    }
+    outDir: 'dist',
+    emptyOutDir: true,
   },
+
+  // 开发服务器配置
+  server: {
+    port: 56860,
+    open: true,
+    hmr: true,
+  },
+
+  // CSS 配置
   css: {
-    postcss: {
-      plugins: [
-        tailwindcss,
-        autoprefixer
-      ]
-    }
-  }
-});
+    postcss: './postcss.config.js',
+    devSourcemap: true,
+  },
+
+  // 环境变量定义
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(mode),
+  },
+}));
