@@ -173,7 +173,7 @@ dingding-export
 ### 兼容性
 - **Node.js**: >= 18.0.0
 - **操作系统**: Windows、macOS、Linux
-- **包管理器**: npm、pnpm、yarn
+- **包管理器**: npm、npm、yarn
 
 ### 安全要求
 - 配置文件存储在用户目录，权限设置为仅所有者可读写

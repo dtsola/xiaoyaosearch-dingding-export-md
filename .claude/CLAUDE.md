@@ -43,7 +43,7 @@
 |---------|------|---------|------|
 | **运行时** | Node.js | >= 18.0.0 | CLI 工具标准运行时 |
 | **语言** | TypeScript | 5.3+ | 编译时类型安全 |
-| **包管理** | pnpm | 8.x+ | 严格依赖管理，节省空间 |
+| **包管理** | npm | 8.x+ | 严格依赖管理，节省空间 |
 
 ### 1.2 开发框架
 
@@ -244,10 +244,10 @@ Closes #123
 
 ```javascript
 // .husky/pre-commit
-pnpm exec lint-staged
+npm exec lint-staged
 
 // .husky/commit-msg
-pnpm exec commitlint --edit $1
+npm exec commitlint --edit $1
 ```
 
 ---
@@ -301,13 +301,13 @@ describe('CookieManager', () => {
 
 ```bash
 # 运行所有测试
-pnpm test
+npm test
 
 # 运行测试并查看覆盖率
-pnpm test:coverage
+npm test:coverage
 
 # 运行测试 UI
-pnpm test:ui
+npm test:ui
 ```
 
 ---
@@ -328,10 +328,10 @@ pnpm test:ui
 npm version <major|minor|patch>
 
 # 2. 构建项目
-pnpm build
+npm build
 
 # 3. 发布到 npm
-pnpm publish
+npm publish
 
 # 4. 创建 Git 标签
 git push --follow-tags
@@ -430,23 +430,23 @@ POST /api/document/data (Header: a-dentry-key)
 
 ```bash
 # 开发
-pnpm dev                      # 启动开发模式
-pnpm build                    # 构建项目
-pnpm build:watch              # 监听模式构建
+npm dev                      # 启动开发模式
+npm build                    # 构建项目
+npm build:watch              # 监听模式构建
 
 # 代码质量
-pnpm type-check               # TypeScript 类型检查
-pnpm lint                     # ESLint 检查
-pnpm lint:fix                 # ESLint 自动修复
-pnpm format                   # Prettier 格式化
+npm type-check               # TypeScript 类型检查
+npm lint                     # ESLint 检查
+npm lint:fix                 # ESLint 自动修复
+npm format                   # Prettier 格式化
 
 # 测试
-pnpm test                     # 运行所有测试
-pnpm test:ui                  # 运行测试 UI
-pnpm test:coverage            # 运行测试覆盖率
+npm test                     # 运行所有测试
+npm test:ui                  # 运行测试 UI
+npm test:coverage            # 运行测试覆盖率
 
 # 发布
-pnpm release                  # 发布到 npm
+npm release                  # 发布到 npm
 ```
 
 ---
@@ -463,7 +463,7 @@ pnpm release                  # 发布到 npm
 
 - Node.js: >= 18.0.0
 - 操作系统: Windows、macOS、Linux
-- 包管理器: npm、pnpm、yarn
+- 包管理器: npm、npm、yarn
 
 ### 10.3 性能要求
 
