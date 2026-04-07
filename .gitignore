@@ -72,6 +72,14 @@ build/
 .pnpm-store/
 .eslintcache
 
+# Vite
+.output/
+.vite/
+
+# Chrome Extension
+*.crx
+*.pem
+
 # 环境变量（包含敏感信息）
 .env
 .env.local
