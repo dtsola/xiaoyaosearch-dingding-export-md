@@ -1,0 +1,81 @@
+# 依赖目录
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 日志文件
+*.log
+logs/
+
+# IDE和编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 临时文件
+temp/
+tmp/
+*.tmp
+
+# 包管理器
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 测试覆盖率
+coverage/
+.coverage
+.nyc_output/
+
+# Python
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytest_cache/
+
+# palywright
+.palywright-mcp
+
+# 测试文件目录
+*.old
+upload/
+flask_sessions/
+*.mp4
+
+# 发布版应用
+release/
+
+# 临时文档
+**/项目提示词.md
+docs/base/
+olds/
+output/
+list.txt
+
+# 整合包运行时
+runtime/
+runtime_backup/
+
+# Node.js/TypeScript
+dist/
+build/
+*.tgz
+.pnpm-store/
+.eslintcache
+
+# 环境变量（包含敏感信息）
+.env
+.env.local
+.env.*.local
+config.json
+.feishu-export/
+

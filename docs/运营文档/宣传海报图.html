@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1600, initial-scale=1.0">
+  <title>小遥搜索飞书导出工具 - 宣传海报</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 1600px;
+      height: 800px;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: #FFFFFF;
+    }
+
+    .poster {
+      width: 1600px;
+      height: 800px;
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 100px;
+      position: relative;
+    }
+
+    /* 1. 顶部标题区 */
+    .title-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .brand-title {
+      font-size: 42px;
+      font-weight: 700;
+      color: #1E90FF;
+      letter-spacing: 4px;
+    }
+
+    /* 2. Logo与英文区 */
+    .logo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .logo-container {
+      width: 256px;
+      height: 256px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .logo-img {
+      width: 256px;
+      height: 256px;
+      object-fit: contain;
+    }
+
+    /* 3. 描述文字区 */
+    .description-section {
+      text-align: center;
+      max-width: 1000px;
+      margin-bottom: 15px;
+    }
+
+    .description-text {
+      font-size: 16px;
+      color: #333;
+      line-height: 1.8;
+    }
+
+    /* 4. 标语区 */
+    .slogan-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .slogan {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1E90FF;
+      letter-spacing: 2px;
+    }
+
+    /* 5. 功能模块区 */
+    .features-section {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-bottom: 40px;
+      width: 100%;
+    }
+
+    .feature-item {
+      flex: 1;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: #E6F7FF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      font-size: 36px;
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* 6. 底部说明区 */
+    .footer-section {
+      text-align: center;
+      max-width: 1100px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #E6F7FF 100%);
+      border: 2px solid #BAE7FF;
+      border-radius: 20px;
+      padding: 30px 40px;
+      box-shadow: 0 2px 10px rgba(30, 144, 255, 0.1);
+    }
+
+    .privacy-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1E90FF;
+      margin-bottom: 12px;
+    }
+
+    .privacy-desc {
+      font-size: 15px;
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .tech-tags {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .tech-tag {
+      background: #E6F7FF;
+      color: #1E90FF;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="poster">
+    <!-- 1. 顶部标题区 -->
+    <div class="title-section">
+      <h1 class="brand-title">✦ 小遥搜索飞书导出工具 ✦</h1>
+    </div>
+
+    <!-- 2. Logo区 -->
+    <div class="logo-section">
+      <div class="logo-container">
+        <img src="../产品文档/logos/logo.png" alt="小遥搜索飞书导出工具" class="logo-img" onerror="this.outerHTML='<div style=\'font-size:80px;\'>📄</div>'">
+      </div>
+    </div>
+
+    <!-- 3. 描述文字区 -->
+    <div class="description-section">
+      <p class="description-text">
+        跨平台命令行工具，将飞书文档/知识库批量导出为本地 Markdown 格式。<br>
+        支持保留目录结构和资源文件，让您的知识资产永久可控。
+      </p>
+    </div>
+
+    <!-- 4. 标语区 -->
+    <div class="slogan-section">
+      <p class="slogan">批量导出 · 结构保留 · 资产可控</p>
+    </div>
+
+    <!-- 5. 功能模块区 -->
+    <div class="features-section">
+      <div class="feature-item">
+        <div class="feature-icon">📚</div>
+        <h3 class="feature-title">全类型导出</h3>
+        <p class="feature-desc">支持单文档、批量、文件夹、完整知识库导出，满足各种场景需求</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔄</div>
+        <h3 class="feature-title">增量同步</h3>
+        <p class="feature-desc">智能识别变更文档，仅导出有更新的内容，节省时间和 API 调用</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🌐</div>
+        <h3 class="feature-title">跨平台支持</h3>
+        <p class="feature-desc">Windows/macOS/Linux 全平台支持，统一的命令行体验</p>
+      </div>
+    </div>
+
+    <!-- 6. 底部说明区 -->
+    <div class="footer-section">
+      <h2 class="privacy-title">开源免费，生态扩展</h2>
+      <p class="privacy-desc">
+        完全开源免费，MIT 许可证。作为小遥搜索生态的扩展工具，导出的 Markdown 文档可直接配合小遥搜索进行本地 AI 知识检索。
+      </p>
+      <div class="tech-tags">
+        <span class="tech-tag">TypeScript</span>
+        <span class="tech-tag">Node.js</span>
+        <span class="tech-tag">Commander.js</span>
+        <span class="tech-tag">飞书开放平台</span>
+        <span class="tech-tag">Markdown</span>
+        <span class="tech-tag">CLI</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
