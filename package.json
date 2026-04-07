@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development vite",
     "build": "cross-env NODE_ENV=production vite build",
+    "build:dev": "cross-env NODE_ENV=development vite build --mode development",
     "preview": "vite preview"
   },
   "author": "dtsola",

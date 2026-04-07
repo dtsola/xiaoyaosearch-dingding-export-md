@@ -5,6 +5,9 @@ import CellRadios from "./script/component/settings/cell_radios.js";
 import { getCfg, CFG_KEY, setCfg } from "./script/cfg.js";
 import version from "./script/version.js";
 
+// 导入样式 - Tailwind CSS + DaisyUI
+import "./app.css";
+
 let ddddom = document.querySelector(`.my-dingdocdownloader`);
 
 // 如果是本地调试，那么每次运行总是生成新的，干掉老的。
@@ -216,7 +219,7 @@ function showHelp$About() {
             h("div", {class: "mt-4"}, [
                 h("div", {class: "font-bold"}, "版本变更记录"),
                 h("div", {class: ""}, [
-                    h("div", {}, "v1.0.6："),
+                    h("div", {}, "v1.0.0："),
                     h("ul", {}, [
                         h("li", {class: "text-sm text-zinc-600"}, "1、修复钉钉文档下载为pdf在没有水印的情况下出错。"),
                         h("li", {class: "text-sm text-zinc-600"}, "2、修复文件名中数字被抹除的问题。"),

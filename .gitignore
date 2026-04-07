@@ -86,4 +86,5 @@ build/
 .env.*.local
 config.json
 .dingding-export/
+dev-bookmarklet
 

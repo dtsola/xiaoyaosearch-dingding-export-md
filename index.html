@@ -28,8 +28,11 @@
     在开发环境页面下（此页面）无法进行钉钉接口的调用，因此无法进行调试。你可以将下方的按钮拖动至书签栏，然后打开【钉钉文档】页面后，再点击刚才拖到书签栏的按钮，开始进行调试。
 </p>
 <div class="mt-4">
-    <a class="dddd-btn dddd-btn-xs"
-       href="javascript:var s = document.createElement('script');s.src='http://localhost:56860/assets/main.js?t='+Math.random();document.head.append(s)">[开发版]钉钉文档下载器</a>
+    <div class="flex flex-col gap-2">
+        <a class="dddd-btn dddd-btn-xs"
+           href="javascript:(function(){var css=document.createElement('link');css.rel='stylesheet';css.crossOrigin='anonymous';css.href='http://localhost:56860/dev-bookmarklet/bookmarklet.css?t='+Math.random();document.head.appendChild(css);var s=document.createElement('script');s.type='text/javascript';s.crossOrigin='anonymous';s.src='http://localhost:56860/dev-bookmarklet/bookmarklet.iife.js?t='+Math.random();s.onerror=function(){console.error('Failed to load bookmarklet. Make sure to run: npm run build:dev');};document.head.appendChild(s);})();">[开发版]钉钉文档下载器</a>
+        <small class="text-xs text-zinc-500">⚠️ 开发版需要先运行 npm run build:dev，然后打开钉钉文档页面使用</small>
+    </div>
 </div>
 <p class="mt-4">
     <a class="dddd-link" href="https://alidocs.dingtalk.com/i/desktop/my-space" target="_blank">立即跳转到钉钉文档</a>
