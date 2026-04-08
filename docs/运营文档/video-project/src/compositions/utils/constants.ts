@@ -12,12 +12,12 @@ export const VIDEO_CONFIG = {
 
 // 颜色方案
 export const COLORS = {
-  // 飞书蓝
-  feishuBlue: '#3370FF',
+  // 钉钉蓝
+  dingtalkBlue: '#0089FF',
   // GitHub 黑
   githubBlack: '#24292F',
-  // 代码黑
-  codeBlack: '#0D1117',
+  // 浏览器扩展灰
+  extensionGray: '#F5F5F5',
   // 成功绿
   successGreen: '#2EA043',
   // 错误红
@@ -25,15 +25,15 @@ export const COLORS = {
   // 警告黄
   warningYellow: '#D29922',
   // 文字色
-  textPrimary: '#FFFFFF',
-  textSecondary: '#8B949E',
-  textAccent: '#58A6FF',
+  textPrimary: '#333333',
+  textSecondary: '#666666',
+  textAccent: '#0089FF',
   // 背景色
-  bgPrimary: '#0D1117',
-  bgSecondary: '#161B22',
-  bgTertiary: '#21262D',
+  bgPrimary: '#FFFFFF',
+  bgSecondary: '#F5F5F5',
+  bgTertiary: '#E5E5E5',
   // 边框
-  border: '#30363D',
+  border: '#E5E5E5',
 } as const;
 
 // 字体配置
@@ -60,19 +60,17 @@ export const DURATIONS = {
   slow: 45,   // 1.5秒 @ 30fps
 } as const;
 
-// 场景时长（帧数）
+// 场景时长（帧数）- 8个场景
 export const SCENE_DURATIONS = {
   shot01: 15 * 30,  // 15秒 - 背景故事
   shot02: 20 * 30,  // 20秒 - 问题分析
   shot03: 10 * 30,  // 10秒 - 解决方案标题
-  shot04: 30 * 30,  // 30秒 - 功能与场景
-  shot05: 10 * 30,  // 10秒 - 安装工具
-  shot06: 15 * 30,  // 15秒 - 初始化
-  shot07: 10 * 30,  // 10秒 - 单文档导出
-  shot08: 13 * 30,  // 13秒 - 批量导出
-  shot09: 12 * 30,  // 12秒 - 知识库导出
-  shot10: 15 * 30,  // 15秒 - CTA
+  shot04: 15 * 30,  // 15秒 - 功能展示-主界面
+  shot05: 20 * 30,  // 20秒 - 功能展示-批量导出
+  shot06: 10 * 30,  // 10秒 - 功能展示-格式配置
+  shot07: 10 * 30,  // 10秒 - 生态介绍-小遥搜索集成
+  shot08: 10 * 30,  // 10秒 - CTA
 } as const;
 
 // 总时长（增加缓冲，确保配音不会超出）
-export const TOTAL_DURATION = 200 * 30; // 200秒 @ 30fps（足够容纳所有配音）
+export const TOTAL_DURATION = 150 * 30; // 150秒 @ 30fps（足够容纳所有配音）

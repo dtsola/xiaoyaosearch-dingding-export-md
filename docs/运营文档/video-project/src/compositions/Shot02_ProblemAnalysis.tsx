@@ -10,28 +10,28 @@ import { FadeIn } from '../components';
 import { COLORS, FONTS, FONT_SIZES } from './utils/constants';
 
 const problems = [
-  { icon: '❌', title: '无法批量导出', desc: '需要逐个手动导出文档' },
-  { icon: '❌', title: '格式丢失', desc: '导出后排版和图片失效' },
-  { icon: '❌', title: '收费昂贵', desc: '第三方工具价格不菲' },
+  { icon: '❌', title: '云端无法访问', desc: '钉钉文档在云端，AI 无法直接访问' },
+  { icon: '❌', title: '官方只能一篇篇导出', desc: '不支持批量操作' },
+  { icon: '❌', title: '300篇文档需要一整天', desc: '手动效率极低' },
 ];
 
 export const Shot02_ProblemAnalysis: React.FC = () => {
   return (
     <AbsoluteFill style={{
-      backgroundColor: COLORS.bgPrimary,
+      backgroundColor: '#000000',
       padding: 100,
     }}>
       {/* 标题 */}
       <FadeIn delay={0} duration={30}>
-        <h2 style={{
+        <div style={{
           fontSize: FONT_SIZES.title,
-          color: COLORS.errorRed,
+          color: '#FFFFFF',
           marginBottom: 80,
           textAlign: 'center',
           fontFamily: FONTS.title,
         }}>
-          你是否也遇到过这些问题？
-        </h2>
+          我调研了一下，发现问题：
+        </div>
       </FadeIn>
 
       {/* 问题卡片列表 */}
@@ -43,10 +43,10 @@ export const Shot02_ProblemAnalysis: React.FC = () => {
         margin: '0 auto',
       }}>
         {problems.map((problem, index) => (
-          <FadeIn key={index} delay={index * 30} duration={30}>
+          <FadeIn key={index} delay={30 + index * 30} duration={30}>
             <div style={{
-              backgroundColor: COLORS.bgSecondary,
-              border: `2px solid ${COLORS.border}`,
+              backgroundColor: '#1A1A1A',
+              border: `2px solid ${COLORS.dingtalkBlue}`,
               borderRadius: 20,
               padding: 40,
               textAlign: 'center',
@@ -63,7 +63,7 @@ export const Shot02_ProblemAnalysis: React.FC = () => {
               {/* 标题 */}
               <h3 style={{
                 fontSize: FONT_SIZES.heading,
-                color: COLORS.textPrimary,
+                color: '#FFFFFF',
                 margin: '0 0 15px 0',
                 fontFamily: FONTS.title,
               }}>
@@ -84,16 +84,18 @@ export const Shot02_ProblemAnalysis: React.FC = () => {
         ))}
       </div>
 
-      {/* 底部提示 */}
-      <FadeIn delay={150} duration={30}>
+      {/* 底部问题 */}
+      <FadeIn delay={180} duration={30}>
         <p style={{
-          fontSize: FONT_SIZES.small,
-          color: COLORS.textAccent,
+          fontSize: FONT_SIZES.heading,
+          color: COLORS.dingtalkBlue,
           textAlign: 'center',
           marginTop: 80,
           fontFamily: FONTS.body,
         }}>
-          这些痛点让我意识到：需要一个真正好用的飞书导出解决方案
+          所以问题变成了：<br />
+          如何高效地把钉钉文档导出到本地，<br />
+          然后配合小遥搜索实现 AI 搜索？
         </p>
       </FadeIn>
     </AbsoluteFill>
