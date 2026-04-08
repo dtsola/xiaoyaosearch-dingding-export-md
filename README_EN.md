@@ -90,6 +90,10 @@ Automatically load document list of current page after opening plugin, support s
   <img src="docs/产品文档/产品截图/02-批量导出.png" alt="Batch Export" width="600">
 </p>
 
+<p align="center">
+  <img src="docs/产品文档/产品截图/02-批量导出-一对一对应知识库.png" alt="批量导出" width="600">
+</p>
+
 Select multiple documents or folders, click "Download Selected" to batch export.
 
 ### Settings
