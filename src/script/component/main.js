@@ -124,14 +124,20 @@ export default {
             // 下载完成后，会产生一些警告。
             const warnmap = [];
 
+            // 元数据收集 - 用于小遥搜索识别
+            const metadataMap = [];
+            const exportStartTime = new Date().toISOString();
 
             try {
                 // 先让用户选择一个目录保存。
                 const dirHandle = await window.showDirectoryPicker();
 
                 for (let i = 0; i < allDi.length; i++) {
-                    await allDi[i].$download(dirHandle, warnmap);
+                    await allDi[i].$download(dirHandle, warnmap, metadataMap, []);
                 }
+
+                // 写入元数据文件
+                await this.writeMetadataFile(dirHandle, metadataMap, exportStartTime);
 
                 // 真的有警告，那么提示出来。
                 if (warnmap.length > 0) {
@@ -146,6 +152,29 @@ export default {
                 dalert("出错", `下载出错了：${e.message}`);
             }
 
+        },
+
+        // ============================================
+        // 写入元数据文件 - 用于小遥搜索识别
+        // ============================================
+        async writeMetadataFile(dirHandle, metadataMap, exportTime) {
+            const manifest = {
+                version: "1.0.0",
+                exportTime: exportTime,
+                source: "dingtalk-docs",
+                exportTool: "xiaoyaosearch-dingding-export",
+                exportToolVersion: version,
+                files: metadataMap
+            };
+
+            const manifestHandle = await dirHandle.getFileHandle(
+                "xiaoyaosearch-dingding-manifest.xyjson",
+                {create: true}
+            );
+
+            const writable = await manifestHandle.createWritable();
+            await writable.write(JSON.stringify(manifest, null, 2));
+            await writable.close();
         },
         onDentrySelectChange(arg) {
             let dentry = arg.data;
