@@ -2,6 +2,7 @@ import { getDocList, downloadBoard, httpDownload, downloadAmind, downloadAdoc, d
 import Loading from "./loading.js";
 import utils from "../util.js";
 import { getCfg, CFG_KEY } from "../cfg.js";
+import version from "../version.js";
 const DentryItem = {
     props: {
         dentryInfo: {type: Object},
@@ -182,7 +183,7 @@ const DentryItem = {
         },
 
         // 如果本文件被选中了，那么下载本文件。
-        async $download(dirHandler, warnmap, metadataMap = [], pathStack = []) {
+        async $download(dirHandler, warnmap, exportStartTime, pathStack = []) {
 
             let selected = this.$refs.checkbox.checked; // 当前文件是否选中。
             let hasSelected = this.$hasSelected(); // 当前文件或下级内容是否有选中的。
@@ -265,22 +266,6 @@ const DentryItem = {
                                 this.$refs.downloadResult.classList.remove("hidden");
                                 this.$refs.downloadResult.textContent = "✅";
                                 this.$refs.downloadResult.title = "下载完成";
-
-                                // 元数据收集 - 用于小遥搜索识别
-                                const relativePath = [...pathStack, currentName + newext].join("/");
-                                metadataMap.push({
-                                    fileName: currentName + newext,
-                                    originalName: this.dentryInfo.name,
-                                    dentryUuid: this.dentryInfo.dentryUuid,
-                                    dentryKey: this.dentryInfo.dentryKey,
-                                    docKey: this.dentryInfo.docKey,
-                                    url: `https://alidocs.dingtalk.com/i/nodes/${this.dentryInfo.dentryUuid}`,
-                                    fileSize: this.dentryInfo.fileSize,
-                                    extension: this.dentryInfo.extension,
-                                    exportFormat: newext,
-                                    relativePath: relativePath,
-                                    contentType: this.dentryInfo.contentType
-                                });
                             } else if (progressStat.type === "error") {
                                 console.log("下载出错：" + progressStat.error);
 
@@ -292,6 +277,9 @@ const DentryItem = {
                                 this.$el.title = `下载出错：${progressStat.error}`;
                             }
                         });
+
+                        // 下载完成后写入元数据文件 - 用于小遥搜索识别
+                        await this.writeMetadataFile(dirHandler, currentName + newext, exportStartTime, newext);
                     }catch (e) {
                         console.log("下载请求出错：" + e.message);
                         this.$refs.downloadProgress.classList.add("hidden");
@@ -325,9 +313,41 @@ const DentryItem = {
 
                 const newPathStack = [...pathStack, currentName];
                 for (let i = 0; i < allDi.length; i++) {
-                    await allDi[i].$download(currentDirHandle, warnmap, metadataMap, newPathStack);
+                    await allDi[i].$download(currentDirHandle, warnmap, exportStartTime, newPathStack);
                 }
             }
+        },
+
+        // ============================================
+        // 写入单文件元数据 - 用于小遥搜索识别
+        // ============================================
+        async writeMetadataFile(dirHandler, fileName, exportTime, exportFormat) {
+            const metadata = {
+                version: "1.0.0",
+                source: "dingtalk-docs",
+                exportTool: "xiaoyaosearch-dingding-export",
+                exportToolVersion: version,
+                exportTime: exportTime,
+                file: {
+                    fileName: fileName,
+                    originalName: this.dentryInfo.name,
+                    dentryUuid: this.dentryInfo.dentryUuid,
+                    dentryKey: this.dentryInfo.dentryKey,
+                    docKey: this.dentryInfo.docKey,
+                    url: `https://alidocs.dingtalk.com/i/nodes/${this.dentryInfo.dentryUuid}`,
+                    fileSize: this.dentryInfo.fileSize,
+                    extension: this.dentryInfo.extension,
+                    exportFormat: exportFormat,
+                    contentType: this.dentryInfo.contentType
+                }
+            };
+
+            const metadataFileName = `${fileName}.xyddjson`;
+            const metadataHandle = await dirHandler.getFileHandle(metadataFileName, {create: true});
+
+            const writable = await metadataHandle.createWritable();
+            await writable.write(JSON.stringify(metadata, null, 2));
+            await writable.close();
         }
     },
     data: {
