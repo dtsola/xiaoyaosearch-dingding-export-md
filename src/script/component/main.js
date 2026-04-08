@@ -37,6 +37,7 @@ export default {
                 h("div", {ref:"progressTip", style: {fontSize: "15px", fontWeight: "600", color: "#1d1d1f"}}, "我的文档"),
                 h("div", {ref: "btnArea", style: {display: "flex", gap: "8px", alignItems: "center"}}, [
                     h("a", {ref: "reloadBtn", class: "dddd-link hidden", on: {click: this.reload}}, "重新加载"),
+                    h("span", {ref: "overallProgress", class: "hidden", style: {fontSize: "13px", color: "#86868b", whiteSpace: "nowrap"}}, "0/0"),
                     h("button", {
                         ref: "downloadBtn",
                         class: "dddd-btn dddd-btn-primary hidden",
@@ -121,6 +122,12 @@ export default {
                 return;
             }
 
+            // 计算总文件数
+            const totalFiles = this.countTotalFiles(allDi);
+            this.downloadProgress = { total: totalFiles, success: 0, failed: 0 };
+            this.$refs.overallProgress.classList.remove("hidden");
+            this.updateOverallProgress();
+
             // 下载完成后，会产生一些警告。
             const warnmap = [];
 
@@ -132,7 +139,7 @@ export default {
                 const dirHandle = await window.showDirectoryPicker();
 
                 for (let i = 0; i < allDi.length; i++) {
-                    await allDi[i].$download(dirHandle, warnmap, exportStartTime, []);
+                    await allDi[i].$download(dirHandle, warnmap, exportStartTime, [], this);
                 }
 
                 // 真的有警告，那么提示出来。
@@ -148,6 +155,48 @@ export default {
                 dalert("出错", `下载出错了：${e.message}`);
             }
 
+        },
+
+        // 计算总文件数
+        countTotalFiles(dentryItems) {
+            let count = 0;
+            const countItem = (item) => {
+                if (item.$refs.checkbox.checked && item.dentryInfo.dentryType !== "folder") {
+                    count++;
+                }
+                // 递归计算子项
+                let children = item.$refs.di;
+                if (children) {
+                    if (!Array.isArray(children)) {
+                        children = [children];
+                    }
+                    children.forEach(child => countItem(child));
+                }
+            };
+
+            if (!Array.isArray(dentryItems)) {
+                dentryItems = [dentryItems];
+            }
+            dentryItems.forEach(item => countItem(item));
+            return count;
+        },
+
+        // 更新整体进度显示
+        updateOverallProgress() {
+            const { total, success, failed } = this.downloadProgress;
+            this.$refs.overallProgress.textContent = `${success}/${total}${failed > 0 ? `（失败${failed}）` : ''}`;
+        },
+
+        // 下载成功回调
+        onDownloadSuccess() {
+            this.downloadProgress.success++;
+            this.updateOverallProgress();
+        },
+
+        // 下载失败回调
+        onDownloadFailed() {
+            this.downloadProgress.failed++;
+            this.updateOverallProgress();
         },
         onDentrySelectChange(arg) {
             let dentry = arg.data;
@@ -258,5 +307,11 @@ export default {
         dentrys: [
 
         ],
+        // 整体下载进度
+        downloadProgress: {
+            total: 0,
+            success: 0,
+            failed: 0
+        }
     }
 }

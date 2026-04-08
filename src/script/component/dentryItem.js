@@ -183,7 +183,7 @@ const DentryItem = {
         },
 
         // 如果本文件被选中了，那么下载本文件。
-        async $download(dirHandler, warnmap, exportStartTime, pathStack = []) {
+        async $download(dirHandler, warnmap, exportStartTime, pathStack = [], parentComponent = null) {
 
             let selected = this.$refs.checkbox.checked; // 当前文件是否选中。
             let hasSelected = this.$hasSelected(); // 当前文件或下级内容是否有选中的。
@@ -280,6 +280,11 @@ const DentryItem = {
 
                         // 下载完成后写入元数据文件 - 用于小遥搜索识别
                         await this.writeMetadataFile(dirHandler, currentName + newext, exportStartTime, newext);
+
+                        // 通知父组件下载成功
+                        if (parentComponent && parentComponent.onDownloadSuccess) {
+                            parentComponent.onDownloadSuccess();
+                        }
                     }catch (e) {
                         console.log("下载请求出错：" + e.message);
                         this.$refs.downloadProgress.classList.add("hidden");
@@ -287,6 +292,11 @@ const DentryItem = {
                         this.$refs.downloadResult.textContent = "❗";
                         this.$refs.downloadResult.title = `下载请求出错：${e.message}`;
                         this.$el.title = `下载请求出错：${e.message}`;
+
+                        // 通知父组件下载失败
+                        if (parentComponent && parentComponent.onDownloadFailed) {
+                            parentComponent.onDownloadFailed();
+                        }
                     }
                 }
 
@@ -313,7 +323,7 @@ const DentryItem = {
 
                 const newPathStack = [...pathStack, currentName];
                 for (let i = 0; i < allDi.length; i++) {
-                    await allDi[i].$download(currentDirHandle, warnmap, exportStartTime, newPathStack);
+                    await allDi[i].$download(currentDirHandle, warnmap, exportStartTime, newPathStack, parentComponent);
                 }
             }
         },
