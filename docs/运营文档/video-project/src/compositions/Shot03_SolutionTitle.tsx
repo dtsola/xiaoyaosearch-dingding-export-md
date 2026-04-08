@@ -20,27 +20,13 @@ export const Shot03_SolutionTitle: React.FC = () => {
       padding: 100,
     }}>
 
-      {/* 文字标题 */}
-      <FadeIn delay={0} duration={20}>
-        <div style={{
-          fontSize: FONT_SIZES.subtitle,
-          color: '#FFFFFF',
-          margin: '0 0 40px 0',
-          fontFamily: FONTS.title,
-          textAlign: 'center',
-          opacity: 0.8,
-        }}>
-          作为一个独立开发者，遇到问题就解决问题。
-        </div>
-      </FadeIn>
-
       {/* 主标题 */}
-      <FadeIn delay={30} duration={30}>
+      <FadeIn delay={0} duration={30}>
         <h1 style={{
           fontSize: FONT_SIZES.title,
           fontWeight: 'bold',
           color: COLORS.dingtalkBlue,
-          margin: '0 0 40px 0',
+          margin: '0 0 60px 0',
           fontFamily: FONTS.title,
           textAlign: 'center',
         }}>
@@ -49,13 +35,12 @@ export const Shot03_SolutionTitle: React.FC = () => {
       </FadeIn>
 
       {/* 生态图 */}
-      <FadeIn delay={90} duration={30}>
+      <FadeIn delay={60} duration={30}>
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: 20,
-          marginTop: 40,
         }}>
           <div style={{
             fontSize: FONT_SIZES.body,

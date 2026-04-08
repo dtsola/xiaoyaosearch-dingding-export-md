@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-小遥搜索飞书导出工具 - 配音生成脚本
+小遥搜索钉钉导出工具 - 配音生成脚本
 使用 edge-tts 库生成 Microsoft Edge TTS 配音（完全免费）
 """
 
@@ -17,29 +17,25 @@ if sys.platform == 'win32':
 
 # 配音文本（按镜头）
 VOICEOVER_TEXTS = {
-    'shot01': '''大家好，我是 D-T-S-O-L-A，一个独立开发者。前段时间，我朋友遇到了一个很头疼的问题：他在飞书上整理了数百篇技术文档，但因为工作变动需要离职，想把所有文档导出到本地，却发现飞书官方的导出功能并不完善。''',
+    'shot01': '''大家好，我是 D T S O L A。我开发了小遥搜索本地 AI 搜索工具，已获一千多颗星。有用户问我，能搜索钉钉文档吗，我的技术文档都在钉钉上。''',
 
-    'shot02': '''市面上的导出工具要么收费昂贵，要么功能有限：不能批量导出、无法保持目录结构、图片和附件下载失败、格式转换后丢失排版。这些痛点让我意识到：需要一个真正好用的飞书导出解决方案。''',
+    'shot02': '''钉钉文档在云端，本地人工智能无法访问。官方只能一篇篇手动导出，不支持批量。三百篇文档需要一整天。''',
 
-    'shot03': '''所以我开发了小遥搜索飞书导出工具。''',
+    'shot03': '''作为一个独立开发者，遇到问题就解决问题。所以，我开发了小遥搜索钉钉导出工具。它的核心价值是：高效导出、AI 搜索。''',
 
-    'shot04': '''这是一个完全开源、免费的 CLI 工具，专为飞书用户设计。核心功能包括：单个文档导出、完整知识库导出、批量导出、自动下载图片附件、增量导出。这个工具非常适合：知识管理爱好者备份文档、自由职业者迁移笔记、创业团队做知识库备份、技术文档维护者导出 Git、DevOps 工程师集成定时任务、以及学生用户跨平台使用。''',
+    'shot04': '''这是一个完全开源、免费的浏览器扩展插件。打开钉钉文档页面，点击插件图标，插件会自动识别当前页面的文档列表，支持勾选导出。''',
 
-    'shot05': '''使用非常简单，只需3步。第一步，安装工具。完全开源免费，支持 Windows、macOS 和 Linux。只需 npm 一键安装。''',
+    'shot05': '''支持单个文档导出、批量文档导出、文件夹递归导出。勾选多个文档或文件夹，点击"下载选中"即可批量导出。导出过程中会显示实时进度，让你清楚知道当前状态。100篇文档，5分钟搞定。''',
 
-    'shot06': '''第二步，运行 feishu-export init，通过交互式向导快速配置飞书应用信息。''',
+    'shot06': '''支持多种格式转换：docx、md、pdf、xlsx、jpg。可以在设置中为不同类型的文档设置默认导出格式，满足不同使用场景。''',
 
-    'shot07': '''第三步，使用 feishu-export doc 加上文档 ID，就能导出单个文档。''',
+    'shot07': '''导出后的文档可以直接导入小遥搜索，实现本地 AI 搜索。试试问："我上次写的关于微服务架构的文档在哪？"AI 立刻帮你找到。这就是小遥搜索生态的价值：导出、备份、AI 搜索。''',
 
-    'shot08': '''如果需要批量导出，准备一个文档 ID 列表文件，运行 feishu-export docs --file。''',
-
-    'shot09': '''要导出整个知识库，只需运行 feishu-export wiki 加上知识库 ID。所有文档都会转换为标准的 Markdown 格式，图片和附件自动下载，目录结构完美保持。详细使用文档和源码，请访问 github。''',
-
-    'shot10': '''工具完全开源免费，欢迎试用。如果觉得有帮助，请给个三连支持独立开发。我是 D-T-S-O-L-A，我们下期见！''',
+    'shot08': '''工具完全开源免费，欢迎试用。如果觉得有帮助，请给两个项目都点星支持独立开发。扫码加入用户交流群，一起探讨知识管理和人工智能搜索。让搜索像聊天一样简单。我是 D T S O L A，我们下期见。''',
 }
 
 DEFAULT_VOICE = 'zh-CN-XiaoxiaoNeural'  # 女声
-# 男声
+# 男声选项：'zh-CN-YunxiNeural'
 
 # 语速设置（正常语速）
 SPEECH_RATE = '+0%'  # 正常语速
@@ -70,7 +66,7 @@ async def text_to_speech(text: str, output_file: str, voice: str = DEFAULT_VOICE
 async def generate_all_voiceovers(output_dir: str = 'public/audio', voice: str = DEFAULT_VOICE) -> None:
     """生成所有镜头的配音文件"""
     print("=" * 60)
-    print("小遥搜索飞书导出工具 - 配音生成")
+    print("小遥搜索钉钉导出工具 - 配音生成")
     print("=" * 60)
     print(f"语音: {voice}")
     print(f"输出目录: {output_dir}")
@@ -84,7 +80,7 @@ async def generate_all_voiceovers(output_dir: str = 'public/audio', voice: str =
     audio_files = []
     for i, (shot, text) in enumerate(VOICEOVER_TEXTS.items(), 1):
         output_file = os.path.join(output_dir, f'{shot}.mp3')
-        print(f"[{i}/10] 正在处理 {shot}...")
+        print(f"[{i}/8] 正在处理 {shot}...")
         await text_to_speech(text, output_file, voice)
         if os.path.exists(output_file):
             audio_files.append(output_file)
@@ -113,8 +109,14 @@ async def generate_all_voiceovers(output_dir: str = 'public/audio', voice: str =
     print()
     print("方法3：最快方法 - 使用在线 TTS 一次生成")
     print("  访问：https://ttsmaker.com/")
-    print("  选择中文语音，复制完整配音文本（见 QUICK_START.md）")
+    print("  选择中文语音，复制完整配音文本（见下方）")
     print("  一次性生成并保存为 voiceover.mp3")
+    print()
+    print("=" * 60)
+    print("完整配音文本（用于一次性生成）")
+    print("-" * 40)
+    full_text = ' '.join(VOICEOVER_TEXTS.values())
+    print(full_text)
     print()
     print("=" * 60)
 
@@ -127,7 +129,7 @@ def main():
         '--voice',
         type=str,
         default=DEFAULT_VOICE,
-        help='使用的语音（默认：云希男声）'
+        help='使用的语音（默认：云希女声）'
     )
     parser.add_argument(
         '--output',

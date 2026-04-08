@@ -1,6 +1,6 @@
 /**
  * 镜头 02：问题分析
- * 时长：20秒
+ * 时长：10.9秒 (328帧)
  * @module Shot02_ProblemAnalysis
  */
 
@@ -21,19 +21,6 @@ export const Shot02_ProblemAnalysis: React.FC = () => {
       backgroundColor: '#000000',
       padding: 100,
     }}>
-      {/* 标题 */}
-      <FadeIn delay={0} duration={30}>
-        <div style={{
-          fontSize: FONT_SIZES.title,
-          color: '#FFFFFF',
-          marginBottom: 80,
-          textAlign: 'center',
-          fontFamily: FONTS.title,
-        }}>
-          我调研了一下，发现问题：
-        </div>
-      </FadeIn>
-
       {/* 问题卡片列表 */}
       <div style={{
         display: 'flex',
@@ -41,9 +28,10 @@ export const Shot02_ProblemAnalysis: React.FC = () => {
         gap: 60,
         maxWidth: 1600,
         margin: '0 auto',
+        marginTop: 100,
       }}>
         {problems.map((problem, index) => (
-          <FadeIn key={index} delay={30 + index * 30} duration={30}>
+          <FadeIn key={index} delay={20 + index * 50} duration={30}>
             <div style={{
               backgroundColor: '#1A1A1A',
               border: `2px solid ${COLORS.dingtalkBlue}`,
@@ -83,21 +71,6 @@ export const Shot02_ProblemAnalysis: React.FC = () => {
           </FadeIn>
         ))}
       </div>
-
-      {/* 底部问题 */}
-      <FadeIn delay={180} duration={30}>
-        <p style={{
-          fontSize: FONT_SIZES.heading,
-          color: COLORS.dingtalkBlue,
-          textAlign: 'center',
-          marginTop: 80,
-          fontFamily: FONTS.body,
-        }}>
-          所以问题变成了：<br />
-          如何高效地把钉钉文档导出到本地，<br />
-          然后配合小遥搜索实现 AI 搜索？
-        </p>
-      </FadeIn>
     </AbsoluteFill>
   );
 };

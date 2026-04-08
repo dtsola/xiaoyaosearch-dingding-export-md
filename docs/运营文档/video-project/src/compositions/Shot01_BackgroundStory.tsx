@@ -1,6 +1,6 @@
 /**
  * 镜头 01：背景故事
- * 时长：15秒
+ * 时长：14.5秒 (436帧)
  * @module Shot01_BackgroundStory
  */
 
@@ -26,93 +26,29 @@ export const Shot01_BackgroundStory: React.FC = () => {
           fontSize: FONT_SIZES.body,
           fontWeight: 'normal',
           color: '#FFFFFF',
-          margin: '0 0 20px 0',
+          margin: '0 0 30px 0',
           fontFamily: FONTS.body,
           textAlign: 'center',
         }}>
-          大家好，我是 dtsola，一个独立开发者。
+          大家好，我是 <span style={{ color: COLORS.dingtalkBlue, fontWeight: 'bold' }}>dtsola</span>，一个独立开发者。
         </p>
       </FadeIn>
 
-      <FadeIn delay={30} duration={20}>
+      <FadeIn delay={120} duration={30}>
         <p style={{
           fontSize: FONT_SIZES.body,
           fontWeight: 'normal',
           color: '#FFFFFF',
-          margin: '0 0 20px 0',
+          margin: '0 0 30px 0',
           fontFamily: FONTS.body,
           textAlign: 'center',
         }}>
-          我开发了"小遥搜索"——本地 AI 搜索工具
+          我开发了"小遥搜索"——本地 AI 搜索工具，<br />
+          已获得 1000+ GitHub Stars。
         </p>
       </FadeIn>
 
-      <FadeIn delay={60} duration={20}>
-        <p style={{
-          fontSize: FONT_SIZES.body,
-          fontWeight: 'normal',
-          color: '#FFFFFF',
-          margin: '0 0 20px 0',
-          fontFamily: FONTS.body,
-          textAlign: 'center',
-        }}>
-          已获得 1000+ GitHub Stars
-        </p>
-      </FadeIn>
-
-      <FadeIn delay={90} duration={20}>
-        <p style={{
-          fontSize: FONT_SIZES.body,
-          fontWeight: 'normal',
-          color: '#FFFFFF',
-          margin: '0 0 20px 0',
-          fontFamily: FONTS.body,
-          textAlign: 'center',
-        }}>
-          小遥搜索的核心是：
-        </p>
-      </FadeIn>
-
-      <FadeIn delay={120} duration={20}>
-        <p style={{
-          fontSize: FONT_SIZES.body,
-          fontWeight: 'normal',
-          color: '#FFFFFF',
-          margin: '0 0 20px 0',
-          fontFamily: FONTS.body,
-          textAlign: 'center',
-        }}>
-          听懂你的话、看懂你的图
-        </p>
-      </FadeIn>
-
-      <FadeIn delay={150} duration={20}>
-        <p style={{
-          fontSize: FONT_SIZES.body,
-          fontWeight: 'normal',
-          color: '#FFFFFF',
-          margin: '0 0 20px 0',
-          fontFamily: FONTS.body,
-          textAlign: 'center',
-        }}>
-          用 AI 找到本地任何文件
-        </p>
-      </FadeIn>
-
-      <FadeIn delay={180} duration={20}>
-        <p style={{
-          fontSize: FONT_SIZES.body,
-          fontWeight: 'normal',
-          color: '#FFFFFF',
-          margin: '0 0 40px 0',
-          fontFamily: FONTS.body,
-          textAlign: 'center',
-        }}>
-          发布后收到很多用户反馈：
-        </p>
-      </FadeIn>
-
-      <FadeIn delay={210} duration={20}>
+      <FadeIn delay={280} duration={40}>
         <p style={{
           fontSize: FONT_SIZES.body,
           fontWeight: 'bold',
