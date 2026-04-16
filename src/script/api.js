@@ -133,7 +133,17 @@ async function doRequest(config) {
     }
     return httpRequest(config).then(resp => {
         if (!resp.isSuccess) {
-            return Promise.reject(new Error(JSON.stringify(resp)));
+            // 解析错误信息，提供更有意义的错误消息
+            let errorMsg = `请求失败: ${JSON.stringify(resp)}`;
+
+            // 检查是否是权限错误
+            if (resp.errorCode === "1000" || resp.errorMsg?.includes("PERMISSION_NoPermission")) {
+                errorMsg = `PERMISSION_NoPermission: 无权限访问此资源`;
+            } else if (resp.errorMsg) {
+                errorMsg = `${resp.errorCode || "ERROR"}: ${resp.errorMsg}`;
+            }
+
+            return Promise.reject(new Error(errorMsg));
         }
         return resp;
     });

@@ -104,8 +104,13 @@ const DentryItem = {
             }
         },
         async loadChildrenData(selected, loadMoreId) {
-            this.$refs.diricon.classList.add("hidden");
-            this.$refs.loading.$el.classList.remove("hidden");
+            if (this.$refs.diricon) {
+                this.$refs.diricon.classList.add("hidden");
+            }
+            // 安全地处理 loading 组件
+            if (this.$refs.loading && this.$refs.loading.$el) {
+                this.$refs.loading.$el.classList.remove("hidden");
+            }
 
             const {data} = await getDocList(this.dentryInfo.dentryUuid, loadMoreId);
             this.dentryInfo.children = data.children;
@@ -115,8 +120,13 @@ const DentryItem = {
                 this.addDentry(this.dentryInfo.children[i], selected);
             }
 
-            this.$refs.diricon.classList.remove("hidden");
-            this.$refs.loading.$el.classList.add("hidden");
+            if (this.$refs.diricon) {
+                this.$refs.diricon.classList.remove("hidden");
+            }
+            // 安全地处理 loading 组件
+            if (this.$refs.loading && this.$refs.loading.$el) {
+                this.$refs.loading.$el.classList.add("hidden");
+            }
         },
         async onChildrenOpenChange() {
             // console.log("详情：", this.$refs.details.open, "是否选中：", this.$refs.checkbox.checked);
@@ -198,7 +208,10 @@ const DentryItem = {
                 if (this.dentryInfo.dentryType !== "folder") {
                     try {
 
-                        this.$refs.downloadStat.classList.remove("hidden");
+                        // 安全地显示下载状态
+                        if (this.$refs.downloadStat) {
+                            this.$refs.downloadStat.classList.remove("hidden");
+                        }
 
                         let extension = this.dentryInfo.extension;
                         let newext = "";
@@ -214,7 +227,9 @@ const DentryItem = {
 
                         currentFileHandler = await dirHandler.getFileHandle(currentName + newext, {create: true});
 
-                        this.$refs.downloadProgress.style.setProperty("--dddd-value", "16");
+                        if (this.$refs.downloadProgress) {
+                            this.$refs.downloadProgress.style.setProperty("--dddd-value", "16");
+                        }
 
                         // 是个文件，那么按照文件类型下载。
                         let url = "";
@@ -247,7 +262,9 @@ const DentryItem = {
                             throw new Error(`不支持此类型文件的下载：contentType=${this.dentryInfo.contentType},extension=${extension}`);
                         }
 
-                        this.$refs.downloadProgress.style.setProperty("--dddd-value", "25");
+                        if (this.$refs.downloadProgress) {
+                            this.$refs.downloadProgress.style.setProperty("--dddd-value", "25");
+                        }
 
                         // 剩下 75 的百分比拿给 下载文件显示。
 
@@ -257,24 +274,35 @@ const DentryItem = {
                                 // console.log("开始下载")
                             } else if (progressStat.type === "pending") {
                                 // console.log("下载中" + progressStat.percent);
-                                let percent = Math.round(progressStat.percent * 0.75) + 25;
-                                this.$refs.downloadProgress.style.setProperty("--dddd-value", String(percent));
-                                this.$refs.downloadProgress.textContent = percent + "%";
+                                if (this.$refs.downloadProgress) {
+                                    let percent = Math.round(progressStat.percent * 0.75) + 25;
+                                    this.$refs.downloadProgress.style.setProperty("--dddd-value", String(percent));
+                                    this.$refs.downloadProgress.textContent = percent + "%";
+                                }
                             } else if (progressStat.type === "success") {
                                 // console.log("下载中完成");
-                                this.$refs.downloadProgress.classList.add("hidden");
-                                this.$refs.downloadResult.classList.remove("hidden");
-                                this.$refs.downloadResult.textContent = "✅";
-                                this.$refs.downloadResult.title = "下载完成";
+                                if (this.$refs.downloadProgress) {
+                                    this.$refs.downloadProgress.classList.add("hidden");
+                                }
+                                if (this.$refs.downloadResult) {
+                                    this.$refs.downloadResult.classList.remove("hidden");
+                                    this.$refs.downloadResult.textContent = "✅";
+                                    this.$refs.downloadResult.title = "下载完成";
+                                }
                             } else if (progressStat.type === "error") {
                                 console.log("下载出错：" + progressStat.error);
 
-                                this.$refs.downloadProgress.classList.add("hidden");
-                                this.$refs.downloadResult.classList.remove("hidden");
-                                this.$refs.downloadResult.textContent = "❗";
-                                this.$refs.downloadResult.title = `下载出错：${progressStat.error}`;
-
-                                this.$el.title = `下载出错：${progressStat.error}`;
+                                if (this.$refs.downloadProgress) {
+                                    this.$refs.downloadProgress.classList.add("hidden");
+                                }
+                                if (this.$refs.downloadResult) {
+                                    this.$refs.downloadResult.classList.remove("hidden");
+                                    this.$refs.downloadResult.textContent = "❗";
+                                    this.$refs.downloadResult.title = `下载出错：${progressStat.error}`;
+                                }
+                                if (this.$el) {
+                                    this.$el.title = `下载出错：${progressStat.error}`;
+                                }
                             }
                         });
 
@@ -287,16 +315,37 @@ const DentryItem = {
                         }
                     }catch (e) {
                         console.log("下载请求出错：" + e.message);
-                        this.$refs.downloadProgress.classList.add("hidden");
-                        this.$refs.downloadResult.classList.remove("hidden");
-                        this.$refs.downloadResult.textContent = "❗";
-                        this.$refs.downloadResult.title = `下载请求出错：${e.message}`;
-                        this.$el.title = `下载请求出错：${e.message}`;
+
+                        // 检查是否是权限错误
+                        const isPermissionError = e.message.includes("PERMISSION_NoPermission") ||
+                                                 e.message.includes("1000") ||
+                                                 e.message.includes("无权限") ||
+                                                 e.message.includes("NoPermission");
+
+                        // 安全地显示错误状态
+                        if (this.$refs.downloadProgress) {
+                            this.$refs.downloadProgress.classList.add("hidden");
+                        }
+                        if (this.$refs.downloadResult) {
+                            this.$refs.downloadResult.classList.remove("hidden");
+                            this.$refs.downloadResult.textContent = isPermissionError ? "🔒" : "❗";
+                            this.$refs.downloadResult.title = isPermissionError ?
+                                `无权限访问此文档` :
+                                `下载请求出错：${e.message}`;
+                        }
+                        if (this.$el) {
+                            this.$el.title = isPermissionError ?
+                                `无权限访问此文档` :
+                                `下载请求出错：${e.message}`;
+                        }
 
                         // 通知父组件下载失败
                         if (parentComponent && parentComponent.onDownloadFailed) {
                             parentComponent.onDownloadFailed();
                         }
+
+                        // 重要：不要抛出错误，让下载流程继续处理后续文档
+                        // 权限错误应该被跳过，而不是中断整个下载流程
                     }
                 }
 
