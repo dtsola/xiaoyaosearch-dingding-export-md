@@ -70,7 +70,8 @@ export default {
             this.$refs.reloadBtn.classList.add("hidden");
 
             let href = window.location.href;
-            if (DingTalkDomains.some(DingTalkDomain => href.indexOf(DingTalkDomain) === -1)) {
+            // 检测是否在钉钉文档页面（支持 alidocs.dingtalk.com 和 docs.dingtalk.com 两个域名）
+            if (!DingTalkDomains.some(DingTalkDomain => href.includes(DingTalkDomain))) {
                 // 不在钉钉文档界面
                 this.$refs.progressTip.classList.add("text-error");
                 this.$refs.progressTip.textContent = "读取失败，当前页面不是钉钉文档页面。请打开钉钉文档页面后再打开本工具。";
