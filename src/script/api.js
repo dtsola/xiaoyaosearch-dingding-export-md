@@ -665,6 +665,87 @@ async function exportAsImg(asl, optionsString, scene = "", dentryKey, docKey) {
     return url;
 }
 
+/**
+ * 判断文件系统错误是否值得重试。
+ *
+ * FileSystemFileHandle 会缓存文件在磁盘上的状态。如果拿到句柄之后文件被外部程序改动/替换
+ * （网盘同步 OneDrive/坚果云、杀毒软件扫描、Excel/WPS 打开等），再用旧句柄写入就会抛出：
+ *   InvalidStateError: An operation that depends on state cached in an interface object
+ *   was made but the state had changed since it was read from disk.
+ * 这类错误是瞬时的，重新获取句柄后重试通常即可成功。
+ */
+function isRetryableFileError(e) {
+    if (!e) {
+        return false;
+    }
+    const retryableNames = [
+        "InvalidStateError",
+        "NotFoundError",
+        "NotReadableError",
+        "NoModificationAllowedError",
+        "AbortError",
+    ];
+    if (retryableNames.includes(e.name)) {
+        return true;
+    }
+    const message = String(e.message || "");
+    return /state had changed|changed since it was read|no longer exists|could not be read|not readable|not accessible/i.test(message);
+}
+
+/**
+ * 把 Blob 写入指定目录下的文件。
+ *
+ * 每次尝试都会重新获取 FileSystemFileHandle 并重新创建 writable，
+ * 避免复用已经失效的句柄缓存状态；写入后再校验文件大小，避免“假成功”。
+ *
+ * @param dirHandler {FileSystemDirectoryHandle}
+ * @param fileName {string}
+ * @param blob {Blob}
+ * @param options {{retries?: number, onAttempt?: function(number): void}?}
+ * @return {Promise<void>}
+ */
+async function writeBlobToFile(dirHandler, fileName, blob, options = {}) {
+    const retries = options.retries ?? 3;
+    const onAttempt = options.onAttempt || (() => {});
+
+    let lastError;
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            onAttempt(attempt);
+
+            // 关键：每次重试都重新拿句柄，不使用上一次缓存的句柄。
+            const fileHandle = await dirHandler.getFileHandle(fileName, {create: true});
+            const writer = await fileHandle.createWritable();
+            try {
+                await writer.write(blob);
+                await writer.close();
+            } catch (writeError) {
+                // 写入失败时丢弃临时文件，避免残留半截文件。
+                await writer.abort().catch(() => {});
+                throw writeError;
+            }
+
+            // 校验实际落盘大小，防止“进度 100% 但文件不完整”的假成功。
+            const written = await fileHandle.getFile();
+            if (written.size !== blob.size) {
+                throw new DOMException(
+                    `文件写入不完整（期望 ${blob.size} 字节，实际 ${written.size} 字节）`,
+                    "InvalidStateError"
+                );
+            }
+            return;
+        } catch (e) {
+            lastError = e;
+            if (attempt >= retries || !isRetryableFileError(e)) {
+                throw e;
+            }
+            // 递增等待，给网盘同步/杀毒软件留出释放文件的时间。
+            await utils.sleep(300 * attempt);
+        }
+    }
+    throw lastError;
+}
+
 export const api = {
     /**
      * 获取文档信息
@@ -833,42 +914,36 @@ export const api = {
     },
 
     /**
+     * 下载文件内容到内存并返回 Blob。
      *
-     * @param url
-     * @param fileHandler {FileSystemFileHandle}
-     * @param cb
-     * @return {Promise<void>}
+     * 这里只负责网络下载、不写盘：写盘放到下载完成之后（writeBlobToFile），
+     * 避免在等待钉钉服务端导出（可能数十秒）期间一直持有 FileSystemFileHandle，
+     * 从而降低句柄因文件被外部改动而失效的概率。
+     *
+     * @param url {string}
+     * @param cb {function?} 下载进度回调
+     * @return {Promise<Blob>}
      */
-    async httpDownload(url, fileHandler, cb) {
+    async httpDownload(url, cb) {
+        cb = cb || (() => {});
         return new Promise((resolve, reject) => {
-
-            async function save2File(response) {
-                // console.log("开始写入文件", typeof response);
-                const writer = await fileHandler.createWritable();
-                await writer.write(new Blob([response]));
-                await writer.close();
-                // console.log("写入文件完成")
-            }
-
             httpRequest({
                 url: url,
                 method: "get",
                 originResponse: true,
                 onBegin(loaded, total) {
-                    cb({type: "begin", percent: utils.numberRound((loaded / total) * 100)})
+                    cb({type: "begin", percent: total ? utils.numberRound((loaded / total) * 100) : 0});
                 },
                 onProgress(loaded, total) {
-                    cb({type: "pending", percent: utils.numberRound((loaded / total) * 100)})
+                    cb({type: "pending", percent: total ? utils.numberRound((loaded / total) * 100) : 0, loaded, total});
                 },
                 onEnd(error, response) {
                     if (error) {
                         cb({type: "error", error: error});
                         reject(new Error(error));
                     } else {
-                        save2File(response).then(() => {
-                            cb({type: "success"});
-                            resolve();
-                        }).catch(reject);
+                        cb({type: "downloaded"});
+                        resolve(response);
                     }
                 }
             }).catch(reject);
@@ -888,4 +963,7 @@ export const {
     downloadBoard,
     httpDownload,
 } = api;
+
+// 文件写入辅助函数（包含失效句柄重试逻辑）
+export { writeBlobToFile };
 

@@ -126,6 +126,7 @@ export default {
             // 计算总文件数
             const totalFiles = this.countTotalFiles(allDi);
             this.downloadProgress = { total: totalFiles, success: 0, failed: 0 };
+            this.failedFiles = [];
             this.$refs.overallProgress.classList.remove("hidden");
             this.updateOverallProgress();
 
@@ -143,9 +144,9 @@ export default {
                     await allDi[i].$download(dirHandle, warnmap, exportStartTime, [], this);
                 }
 
-                // 真的有警告，那么提示出来。
-                if (warnmap.length > 0) {
-                    this.showWarnMap(warnmap);
+                // 有警告或有失败，统一汇总提示（避免用户只看到“失败1”却不知道原因）。
+                if (warnmap.length > 0 || this.failedFiles.length > 0) {
+                    this.showExportResult(warnmap, this.failedFiles);
                 }
 
             }catch (e) {
@@ -195,8 +196,9 @@ export default {
         },
 
         // 下载失败回调
-        onDownloadFailed() {
+        onDownloadFailed(name, reason) {
             this.downloadProgress.failed++;
+            this.failedFiles.push({name: name || "未知文件", reason: reason || "未知错误"});
             this.updateOverallProgress();
         },
         onDentrySelectChange(arg) {
@@ -244,10 +246,27 @@ export default {
                 return h("DentryItem", {ref: "di", props: () => ({dentryInfo: dentryInfo, hasmoredata: false}), on: {selectChange: this.onDentrySelectChange}})
             }))
         },
-        showWarnMap(warnMap) {
+        showExportResult(warnMap, failedFiles = []) {
 
             dalert(`已导出勾选的 - 但请您注意 - 小遥搜索 - 钉钉导出 v${version}`, this.$createElement(h => {
+                // 失败文件提示（只有存在失败时才渲染）
+                const failedPanel = failedFiles.length === 0 ? [] : [
+                    h("div", {
+                        class: "mb-4 bg-red-50 text-sm p-4 rounded-md border border-red-200"
+                    }, [
+                        h("div", {class: "font-bold mb-2", style: {color: "#b91c1c"}}, `以下 ${failedFiles.length} 个文件导出失败：`),
+                        h("ul", {style: {paddingLeft: "20px"}}, failedFiles.map(f => {
+                            return h("li", {class: "mb-1"}, [
+                                h("span", {class: "font-bold"}, f.name),
+                                h("div", {class: "text-zinc-600"}, f.reason)
+                            ]);
+                        })),
+                        h("div", {class: "text-zinc-600 mt-2"}, "提示：如果提示“文件状态被外部程序改变”，请把导出目录改到本地非同步文件夹（避免 OneDrive/坚果云等同步盘），并关闭正在占用导出文件的程序（Excel/WPS 等），然后重新导出。")
+                    ])
+                ];
+
                 return h("div", {}, [
+                    ...failedPanel,
                     // 小遥搜索推广区域
                     h("div", {
                         style: {
@@ -286,18 +305,20 @@ export default {
                         }, "立即了解小遥搜索 →")
                     ]),
 
-                    // 原有的警告信息
-                    h("div", {class: "mb-4 bg-amber-400 text-sm p-4 rounded-md"}, "由于Markdown内容支持单一，钉钉文档部分内容无法在 Markdown 中呈现。对于不支持的部分，在导出的md文件中会保留文档的打开链接，您可以打开链接查看钉钉文档原文。建议钉钉文档(.adoc)导出为 .docx 或 .pdf"),
-                    h("ul", {}, warnMap.map(warn => {
-                        return h("li", {}, [
-                            h("span", {}, [
-                                "文件：",h("span", {class: "font-bold"}, warn.name)
-                            ]),
-                            h("div", {}, warn.warns.map(warnStr => {
-                                return h("div", {class: "text-sm text-zinc-600"}, warnStr)
-                            }))
-                        ])
-                    }))
+                    // 原有的警告信息（只有存在警告时才渲染）
+                    ...(warnMap.length > 0 ? [
+                        h("div", {class: "mb-4 bg-amber-400 text-sm p-4 rounded-md"}, "由于Markdown内容支持单一，钉钉文档部分内容无法在 Markdown 中呈现。对于不支持的部分，在导出的md文件中会保留文档的打开链接，您可以打开链接查看钉钉文档原文。建议钉钉文档(.adoc)导出为 .docx 或 .pdf"),
+                        h("ul", {}, warnMap.map(warn => {
+                            return h("li", {}, [
+                                h("span", {}, [
+                                    "文件：",h("span", {class: "font-bold"}, warn.name)
+                                ]),
+                                h("div", {}, warn.warns.map(warnStr => {
+                                    return h("div", {class: "text-sm text-zinc-600"}, warnStr)
+                                }))
+                            ])
+                        }))
+                    ] : [])
                 ]);
             }));
         }
@@ -313,6 +334,8 @@ export default {
             total: 0,
             success: 0,
             failed: 0
-        }
+        },
+        // 本次导出失败的文件（用于最后汇总提示）
+        failedFiles: []
     }
 }

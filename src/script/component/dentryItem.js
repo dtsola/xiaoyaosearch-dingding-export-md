@@ -1,4 +1,4 @@
-import { getDocList, downloadBoard, httpDownload, downloadAmind, downloadAdoc, downloadAxls, downloadDocument } from "../api.js";
+import { getDocList, downloadBoard, httpDownload, writeBlobToFile, downloadAmind, downloadAdoc, downloadAxls, downloadDocument } from "../api.js";
 import Loading from "./loading.js";
 import utils from "../util.js";
 import { getCfg, CFG_KEY } from "../cfg.js";
@@ -201,7 +201,8 @@ const DentryItem = {
             let currentName = utils.fixFileName(this.dentryInfo.name);
 
             let currentDirHandle = null;
-            let currentFileHandler = null;
+            // 实际写入磁盘的文件名，失败时用于提示（在 try 内赋值）。
+            let currentFileName = "";
 
             // 当前文件是选中的，进行下载。
             if (selected) {
@@ -225,7 +226,7 @@ const DentryItem = {
                             newext = getCfg(CFG_KEY.EXPORT_AXLS_AS, ".xlsx");
                         }
 
-                        currentFileHandler = await dirHandler.getFileHandle(currentName + newext, {create: true});
+                        currentFileName = currentName + newext;
 
                         if (this.$refs.downloadProgress) {
                             this.$refs.downloadProgress.style.setProperty("--dddd-value", "16");
@@ -247,7 +248,7 @@ const DentryItem = {
                                 let warns = durl[1];
                                 if (warns && warns.length > 0) {
                                     warnmap.push({
-                                        name: currentFileHandler.name,
+                                        name: currentFileName,
                                         warns: warns,
                                     });
                                 }
@@ -268,59 +269,73 @@ const DentryItem = {
 
                         // 剩下 75 的百分比拿给 下载文件显示。
 
-                        await httpDownload(url, currentFileHandler, (progressStat) => {
+                        // 先把内容下载到内存，再写入磁盘。
+                        // 注意：不要提前 getFileHandle —— 钉钉服务端导出可能耗时较久，
+                        // 期间文件可能被网盘同步/杀毒软件改动，导致提前拿到的句柄失效。
+                        const blob = await httpDownload(url, (progressStat) => {
                             if (progressStat.type === "begin") {
                                 // ..
-                                // console.log("开始下载")
                             } else if (progressStat.type === "pending") {
-                                // console.log("下载中" + progressStat.percent);
                                 if (this.$refs.downloadProgress) {
                                     let percent = Math.round(progressStat.percent * 0.75) + 25;
                                     this.$refs.downloadProgress.style.setProperty("--dddd-value", String(percent));
                                     this.$refs.downloadProgress.textContent = percent + "%";
                                 }
-                            } else if (progressStat.type === "success") {
-                                // console.log("下载中完成");
-                                if (this.$refs.downloadProgress) {
-                                    this.$refs.downloadProgress.classList.add("hidden");
-                                }
-                                if (this.$refs.downloadResult) {
-                                    this.$refs.downloadResult.classList.remove("hidden");
-                                    this.$refs.downloadResult.textContent = "✅";
-                                    this.$refs.downloadResult.title = "下载完成";
-                                }
-                            } else if (progressStat.type === "error") {
-                                console.log("下载出错：" + progressStat.error);
+                            }
+                        });
 
-                                if (this.$refs.downloadProgress) {
-                                    this.$refs.downloadProgress.classList.add("hidden");
-                                }
-                                if (this.$refs.downloadResult) {
-                                    this.$refs.downloadResult.classList.remove("hidden");
-                                    this.$refs.downloadResult.textContent = "❗";
-                                    this.$refs.downloadResult.title = `下载出错：${progressStat.error}`;
-                                }
-                                if (this.$el) {
-                                    this.$el.title = `下载出错：${progressStat.error}`;
+                        // 下载完成后再写盘；写入时每次重新获取句柄，遇到句柄失效会自动重试。
+                        await writeBlobToFile(dirHandler, currentFileName, blob, {
+                            retries: 3,
+                            onAttempt(attempt) {
+                                if (attempt > 1) {
+                                    console.warn(`写入 ${currentFileName} 失败，正在进行第 ${attempt} 次尝试...`);
                                 }
                             }
                         });
 
+                        if (this.$refs.downloadProgress) {
+                            this.$refs.downloadProgress.style.setProperty("--dddd-value", "100");
+                            this.$refs.downloadProgress.textContent = "100%";
+                            this.$refs.downloadProgress.classList.add("hidden");
+                        }
+                        if (this.$refs.downloadResult) {
+                            this.$refs.downloadResult.classList.remove("hidden");
+                            this.$refs.downloadResult.textContent = "✅";
+                            this.$refs.downloadResult.title = "下载完成";
+                        }
+
                         // 下载完成后写入元数据文件 - 用于小遥搜索识别
-                        await this.writeMetadataFile(dirHandler, currentName + newext, exportStartTime, newext);
+                        // 元数据只是辅助信息，写入失败不应把文档标记为下载失败。
+                        try {
+                            await this.writeMetadataFile(dirHandler, currentFileName, exportStartTime, newext);
+                        } catch (metaError) {
+                            console.warn("写入元数据文件失败（不影响文档导出）：" + ((metaError && metaError.message) || metaError));
+                        }
 
                         // 通知父组件下载成功
                         if (parentComponent && parentComponent.onDownloadSuccess) {
                             parentComponent.onDownloadSuccess();
                         }
                     }catch (e) {
-                        console.log("下载请求出错：" + e.message);
+                        const message = (e && e.message) || String(e);
+                        console.log("下载请求出错：" + message);
 
                         // 检查是否是权限错误
-                        const isPermissionError = e.message.includes("PERMISSION_NoPermission") ||
-                                                 e.message.includes("1000") ||
-                                                 e.message.includes("无权限") ||
-                                                 e.message.includes("NoPermission");
+                        const isPermissionError = /PERMISSION_NoPermission|无权限|NoPermission|status 40[13]/.test(message);
+
+                        // 文件系统状态失效：通常由网盘同步、杀毒软件或文件被其它程序占用引起。
+                        const isFileStateError = (e && e.name === "InvalidStateError") ||
+                            /state had changed|changed since it was read|no longer exists|could not be read|not readable/i.test(message);
+
+                        let errorTip;
+                        if (isPermissionError) {
+                            errorTip = "无权限访问此文档";
+                        } else if (isFileStateError) {
+                            errorTip = "写入文件失败：文件状态被外部程序改变。请重试，或把导出目录换成本地非同步文件夹（避免 OneDrive/坚果云等同步盘），并关闭正在占用该文件的程序（Excel/WPS 等）";
+                        } else {
+                            errorTip = "下载请求出错：" + message;
+                        }
 
                         // 安全地显示错误状态
                         if (this.$refs.downloadProgress) {
@@ -329,19 +344,15 @@ const DentryItem = {
                         if (this.$refs.downloadResult) {
                             this.$refs.downloadResult.classList.remove("hidden");
                             this.$refs.downloadResult.textContent = isPermissionError ? "🔒" : "❗";
-                            this.$refs.downloadResult.title = isPermissionError ?
-                                `无权限访问此文档` :
-                                `下载请求出错：${e.message}`;
+                            this.$refs.downloadResult.title = errorTip;
                         }
                         if (this.$el) {
-                            this.$el.title = isPermissionError ?
-                                `无权限访问此文档` :
-                                `下载请求出错：${e.message}`;
+                            this.$el.title = errorTip;
                         }
 
-                        // 通知父组件下载失败
+                        // 通知父组件下载失败（带上文件名和原因，便于汇总提示）
                         if (parentComponent && parentComponent.onDownloadFailed) {
-                            parentComponent.onDownloadFailed();
+                            parentComponent.onDownloadFailed(currentFileName || currentName, errorTip);
                         }
 
                         // 重要：不要抛出错误，让下载流程继续处理后续文档
